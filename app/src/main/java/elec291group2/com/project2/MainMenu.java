@@ -1,10 +1,12 @@
 package elec291group2.com.project2;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -47,7 +49,7 @@ public class MainMenu extends AppCompatActivity
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + ip);
         menu.findItem(R.id.port).setTitle("Port: " + port);
 
-        if (ip == "NOT ENTERED" || port == "NOT ENTERED")
+        if (ip.equals("NOT ENTERED") || port.equals("NOT ENTERED"))
         {
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);
             prompt.setMessage("Please enter your IP address and port.");
@@ -81,7 +83,10 @@ public class MainMenu extends AppCompatActivity
         }
         else
         {
-            super.onBackPressed();
+            Intent exitApp = new Intent(Intent.ACTION_MAIN);
+            exitApp.addCategory(Intent.CATEGORY_HOME);
+            exitApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(exitApp);
         }
     }
 
