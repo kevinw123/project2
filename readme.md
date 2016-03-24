@@ -1,0 +1,1 @@
+This is Group 2's Security System Android application for ELEC291 Section 20C.
