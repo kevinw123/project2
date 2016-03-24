@@ -14,13 +14,14 @@ import android.widget.TextView;
 public class Overview extends Fragment
 {
     View view;
+    TextView overview;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        view = inflater.inflate(R.layout.settings, container, false);
-        TextView overview = (TextView) view.findViewById(R.id.overview);
-        overview.setText("Test");
+        view = inflater.inflate(R.layout.overview, container, false);
+        overview = (TextView) view.findViewById(R.id.overview);
+        overview.setText("test");
 
         return view;
     }
