@@ -12,8 +12,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 /**
  * Created by Kevin on 2016-03-23.
@@ -23,6 +25,7 @@ public class Settings extends Fragment
     EditText ipField, portField, pinField;
     View view;
     SharedPreferences sharedPreferences;
+    boolean notifications;
 
     @Nullable
     @Override
@@ -41,6 +44,10 @@ public class Settings extends Fragment
 
         ipField.setText(sharedPreferences.getString("IP", ""));
         portField.setText(sharedPreferences.getString("Port", ""));
+
+        notifications = sharedPreferences.getBoolean("Notifications", false);
+        ToggleButton notifToggle = (ToggleButton) view.findViewById(R.id.notif_toggle);
+        notifToggle.setChecked(notifications);
 
         saveData.setOnClickListener(new View.OnClickListener()
         {
@@ -78,6 +85,18 @@ public class Settings extends Fragment
                     editor.commit();
                     Toast.makeText(getActivity(), "PIN updated", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        notifToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                notifications = isChecked;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("Notifications", notifications);
+                editor.commit();
             }
         });
 

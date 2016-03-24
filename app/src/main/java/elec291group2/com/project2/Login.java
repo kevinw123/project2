@@ -34,7 +34,7 @@ public class Login extends AppCompatActivity
 
         Button loginBtn = (Button) findViewById(R.id.login_button);
         pinField = (EditText) findViewById(R.id.pin_field);
-        
+
         pin = sharedPreferences.getString("PIN", "NOT ENTERED");
 
         if (pin.equals("NOT ENTERED"))
