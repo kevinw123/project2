@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -29,11 +30,25 @@ public class Security extends Fragment
 {
     SharedPreferences sharedPreferences;
     View view;
+    TextView textStatus;
     Handler handler;
+    int i = 0;
     private Socket socket;
     private String ip;
     private String port;
     private boolean newStatus;
+    private Runnable getStatus = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+      /* do what you need to do */
+
+            getStatus();
+            // Call itself every 500 ms
+            handler.postDelayed(this, 2000);
+        }
+    };
 
     @Nullable
     @Override
@@ -44,6 +59,7 @@ public class Security extends Fragment
         ip = sharedPreferences.getString("IP", "NOT ENTERED");
         port = sharedPreferences.getString("Port", "NOT ENTERED");
         Button kevin = (Button) view.findViewById(R.id.kevin);
+        textStatus = (TextView) view.findViewById(R.id.status);
 
         new Thread(new ClientThread()).start();
         Toast.makeText(this.getContext(), "Client has connected", Toast.LENGTH_SHORT).show();
@@ -93,12 +109,15 @@ public class Security extends Fragment
     {
         try
         {
+            i++;
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String newStatus = in.readLine();
-            if (!(newStatus == null))  // Retrieve command from Android device, add to device queue
+
+            if (in.ready())  // Retrieve command from Android device, add to device queue
             {
-                Toast.makeText(this.getContext(), newStatus, Toast.LENGTH_SHORT).show();
+                String newStatus = in.readLine();
+                textStatus.setText(newStatus);
             }
+            textStatus.setText(String.valueOf(i));
 
         } catch (UnknownHostException e)
         {
@@ -111,20 +130,6 @@ public class Security extends Fragment
             e.printStackTrace();
         }
     }
-
-    private Runnable getStatus = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-      /* do what you need to do */
-
-            getStatus();
-            // Call itself every 500 ms
-            handler.postDelayed(this, 2000);
-        }
-    };
-
 
     class ClientThread implements Runnable {
 
