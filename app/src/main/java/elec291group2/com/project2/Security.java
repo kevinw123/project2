@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 /**
  * Created by Kevin on 2016-03-23.
@@ -27,9 +27,23 @@ public class Security extends Fragment
 {
     SharedPreferences sharedPreferences;
     View view;
+    Handler handler;
     private Socket socket;
     private String ip;
     private String port;
+    private String status;
+    private Runnable getStatus = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+      /* do what you need to do */
+
+            getStatus();
+            // Call itself every 500 ms
+            handler.postDelayed(this, 2000);
+        }
+    };
 
     @Nullable
     @Override
@@ -54,15 +68,8 @@ public class Security extends Fragment
             }
         });
 
-        new Timer().scheduleAtFixedRate(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                Toast.makeText(getActivity(), "hi", Toast.LENGTH_SHORT).show();
-
-            }
-        }, 0, 1000);//put here time 1000 milliseconds=1 second
+        handler = new Handler();
+        handler.postDelayed(getStatus, 100);
 
         return view;
     }
@@ -92,6 +99,27 @@ public class Security extends Fragment
         }
     }
 
+    private String getStatus()
+    {
+        try
+        {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String newStatus =
+            if (!(s == null))  // Retrieve command from Android device, add to device queue
+            {
+            }
+
+        } catch (UnknownHostException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     class ClientThread implements Runnable {
 
