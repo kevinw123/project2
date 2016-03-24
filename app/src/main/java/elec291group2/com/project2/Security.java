@@ -84,6 +84,7 @@ public class Security extends Fragment
         return view;
     }
 
+
     @Override
     public void onPause()
     {
@@ -113,6 +114,19 @@ public class Security extends Fragment
         }
     }
 
+    public void updateStatusUI()
+    {
+        getActivity().runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                textStatus.setText(status);
+            }
+        });
+    }
+
+
     private void getStatus()
     {
         try
@@ -121,7 +135,8 @@ public class Security extends Fragment
             {
 
                 status = in.readLine();
-                System.out.println(status);
+                updateStatusUI();
+                System.out.println("Recieved: " + status);
             }
             //textStatus.setText(String.valueOf(i));
         } catch (Exception e)
@@ -130,6 +145,7 @@ public class Security extends Fragment
         }
 
     }
+
 
     class ClientThread implements Runnable {
 
