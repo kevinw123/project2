@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +34,12 @@ public class Security extends Fragment
     TextView textStatus;
     Handler handler;
     int i = 0;
+    BufferedReader in;
+    PrintWriter out;
     private Socket socket;
     private String ip;
     private String port;
+    private String status;
     private boolean newStatus;
     private Runnable getStatus = new Runnable()
     {
@@ -46,7 +50,7 @@ public class Security extends Fragment
 
             getStatus();
             // Call itself every 500 ms
-            handler.postDelayed(this, 2000);
+            handler.postDelayed(this, 500);
         }
     };
 
@@ -61,8 +65,9 @@ public class Security extends Fragment
         Button kevin = (Button) view.findViewById(R.id.kevin);
         textStatus = (TextView) view.findViewById(R.id.status);
 
+
         new Thread(new ClientThread()).start();
-        Toast.makeText(this.getContext(), "Client has connected", Toast.LENGTH_SHORT).show();
+
 
 
         kevin.setOnClickListener(new View.OnClickListener()
@@ -74,8 +79,7 @@ public class Security extends Fragment
             }
         });
 
-        handler = new Handler();
-        handler.postDelayed(getStatus, 100);
+
 
         return view;
     }
@@ -84,6 +88,16 @@ public class Security extends Fragment
     public void onPause()
     {
         sendCommand("exit");
+        /*
+        try
+        {
+            in.close();
+            out.close();
+            socket.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }*/
         Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
@@ -92,15 +106,9 @@ public class Security extends Fragment
     {
         try
         {
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
-                    true);
             out.println(command);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -109,26 +117,18 @@ public class Security extends Fragment
     {
         try
         {
-            i++;
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
             if (in.ready())  // Retrieve command from Android device, add to device queue
             {
-                String newStatus = in.readLine();
-                textStatus.setText(newStatus);
-            }
-            textStatus.setText(String.valueOf(i));
 
-        } catch (UnknownHostException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
+                status = in.readLine();
+                System.out.println(status);
+            }
+            //textStatus.setText(String.valueOf(i));
         } catch (Exception e)
         {
             e.printStackTrace();
         }
+
     }
 
     class ClientThread implements Runnable {
@@ -138,13 +138,18 @@ public class Security extends Fragment
 
             try {
                 socket = new Socket(ip, Integer.parseInt(port));
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-
+            Looper.prepare();
+            handler = new Handler();
+            handler.postDelayed(getStatus, 1000);
+            Looper.loop();
         }
     }
 
