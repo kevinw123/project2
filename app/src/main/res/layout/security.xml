@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/securityLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/securityLayout"
     android:background="@color/white">
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Security"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView3"/>
+        android:layout_centerVertical="true"
+        android:text="Security"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <Button
+        android:id="@+id/kevin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/kevin"
         android:layout_above="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
-        android:layout_marginBottom="96dp"/>
+        android:layout_marginBottom="96dp"
+        android:text="New Button"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="41dp"
+        android:text="New Text"/>
 </RelativeLayout>

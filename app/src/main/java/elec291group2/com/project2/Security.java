@@ -101,7 +101,7 @@ public class Security extends Fragment
         }
     }
 
-    private String getStatus()
+    private void getStatus()
     {
         try
         {
@@ -109,7 +109,7 @@ public class Security extends Fragment
             String newStatus = in.readLine();
             if (!(newStatus == null))  // Retrieve command from Android device, add to device queue
             {
-                
+                Toast.makeText(this.getContext(), newStatus, Toast.LENGTH_SHORT).show();
             }
 
         } catch (UnknownHostException e)
