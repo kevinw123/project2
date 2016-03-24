@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -35,6 +36,7 @@ public class Settings extends Fragment
         Button saveData = (Button) view.findViewById(R.id.data_button);
 
         pinField = (EditText) view.findViewById(R.id.pin_field);
+        pinField.setInputType(InputType.TYPE_CLASS_NUMBER);
         Button pinUpdate = (Button) view.findViewById(R.id.pin_button);
 
         ipField.setText(sharedPreferences.getString("IP", ""));
@@ -64,11 +66,18 @@ public class Settings extends Fragment
             @Override
             public void onClick(View v)
             {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("PIN", pinField.getText().toString());
-                editor.commit();
-
-                Toast.makeText(getActivity(), "PIN updated", Toast.LENGTH_LONG).show();
+                String newPin = pinField.getText().toString();
+                if(newPin.length() < 1)
+                    Toast.makeText(getActivity(), "PIN too short, no changes made", Toast.LENGTH_SHORT).show();
+                else if(newPin.length() > 6)
+                    Toast.makeText(getActivity(), "PIN too long, no changes made", Toast.LENGTH_SHORT).show();
+                else
+                {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("PIN", newPin);
+                    editor.commit();
+                    Toast.makeText(getActivity(), "PIN updated", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
