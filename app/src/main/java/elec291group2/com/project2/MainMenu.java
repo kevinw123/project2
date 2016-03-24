@@ -108,6 +108,10 @@ public class MainMenu extends AppCompatActivity
                 toolbar.setTitle("Camera");
                 fragment = new Camera();
                 break;
+            case R.id.nav_lights:
+                toolbar.setTitle("Lights");
+                fragment = new Lights();
+                break;
             case R.id.nav_settings:
                 toolbar.setTitle("Settings");
                 fragment = new Settings();

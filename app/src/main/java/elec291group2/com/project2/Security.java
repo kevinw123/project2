@@ -34,18 +34,6 @@ public class Security extends Fragment
     private String ip;
     private String port;
     private boolean newStatus;
-    private Runnable getStatus = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-      /* do what you need to do */
-
-            getStatus();
-            // Call itself every 500 ms
-            handler.postDelayed(this, 2000);
-        }
-    };
 
     @Nullable
     @Override
@@ -123,6 +111,20 @@ public class Security extends Fragment
             e.printStackTrace();
         }
     }
+
+    private Runnable getStatus = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+      /* do what you need to do */
+
+            getStatus();
+            // Call itself every 500 ms
+            handler.postDelayed(this, 2000);
+        }
+    };
+
 
     class ClientThread implements Runnable {
 

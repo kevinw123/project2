@@ -19,7 +19,7 @@ import android.widget.Toast;
  */
 public class Settings extends Fragment
 {
-    EditText ipField, portField;
+    EditText ipField, portField, pinField;
     View view;
     SharedPreferences sharedPreferences;
 
@@ -32,7 +32,10 @@ public class Settings extends Fragment
 
         ipField = (EditText) view.findViewById(R.id.ip_field);
         portField = (EditText) view.findViewById(R.id.port_field);
-        Button saveData = (Button) view.findViewById(R.id.button);
+        Button saveData = (Button) view.findViewById(R.id.data_button);
+
+        pinField = (EditText) view.findViewById(R.id.pin_field);
+        Button pinUpdate = (Button) view.findViewById(R.id.pin_button);
 
         ipField.setText(sharedPreferences.getString("IP", ""));
         portField.setText(sharedPreferences.getString("Port", ""));
@@ -53,6 +56,19 @@ public class Settings extends Fragment
 
                 Toast.makeText(getActivity(), "IP address updated to " + ipField.getText().toString() + "\n" +
                         "Port updated to " + portField.getText().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        pinUpdate.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("PIN", pinField.getText().toString());
+                editor.commit();
+
+                Toast.makeText(getActivity(), "PIN updated", Toast.LENGTH_LONG).show();
             }
         });
 

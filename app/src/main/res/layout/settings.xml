@@ -46,8 +46,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save Data"
-        android:id="@+id/button"
+        android:id="@+id/data_button"
         android:layout_below="@+id/port_field"
         android:layout_alignStart="@+id/port_field"
         android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="New PIN: "
+        android:id="@+id/pin_text"
+        android:layout_below="@+id/data_button"
+        android:layout_alignStart="@+id/ip_text"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/pin_field"
+        android:layout_below="@+id/pin_text"
+        android:layout_alignStart="@+id/port_text"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Pin"
+        android:id="@+id/pin_button"
+        android:layout_below="@+id/pin_field"
+        android:layout_alignStart="@+id/port_field"
+        android:layout_marginTop="10dp"/>
+
 </RelativeLayout>
