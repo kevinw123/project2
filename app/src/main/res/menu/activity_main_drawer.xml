@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/top">
+        <item
+            android:id="@+id/nav_overview"
+            android:icon="@drawable/ic_overview"
+            android:title="Overview"/>
+        <item
+            android:id="@+id/nav_security"
+            android:icon="@drawable/ic_security"
+            android:title="Security"/>
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Camera"/>
+
+    </group>
+
+    <group android:id="@+id/bot">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings"/>
+    </group>
+
+    <group android:id="@+id/info">
+        <item
+            android:id="@+id/ip_address"
+            android:title="IP Address"/>
+        <item
+            android:id="@+id/port"
+            android:title="Port"/>
+        <item
+            android:id="@+id/status"
+            android:title="System Status: "/>
+    </group>
+
+</menu>
