@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -31,7 +33,7 @@ public class Security extends Fragment
     private Socket socket;
     private String ip;
     private String port;
-    private String status;
+    private boolean newStatus;
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -104,9 +106,10 @@ public class Security extends Fragment
         try
         {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String newStatus =
-            if (!(s == null))  // Retrieve command from Android device, add to device queue
+            String newStatus = in.readLine();
+            if (!(newStatus == null))  // Retrieve command from Android device, add to device queue
             {
+                
             }
 
         } catch (UnknownHostException e)
