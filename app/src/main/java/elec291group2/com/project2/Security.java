@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,15 +31,14 @@ public class Security extends Fragment
     SharedPreferences sharedPreferences;
     View view;
     TextView textStatus;
-    Handler handler;
-    int i = 0;
+
     BufferedReader in;
     PrintWriter out;
+    Handler handler;
     private Socket socket;
-    private String ip;
-    private String port;
+    private String ipField;
+    private String portField;
     private String status;
-    private boolean newStatus;
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -60,8 +58,8 @@ public class Security extends Fragment
     {
         view = inflater.inflate(R.layout.security, container, false);
         sharedPreferences = this.getActivity().getSharedPreferences("serverData", Context.MODE_PRIVATE);
-        ip = sharedPreferences.getString("IP", "NOT ENTERED");
-        port = sharedPreferences.getString("Port", "NOT ENTERED");
+        ipField = sharedPreferences.getString("IP", "NOT ENTERED");
+        portField = sharedPreferences.getString("Port", "NOT ENTERED");
         Button kevin = (Button) view.findViewById(R.id.kevin);
         textStatus = (TextView) view.findViewById(R.id.status);
 
@@ -89,17 +87,16 @@ public class Security extends Fragment
     public void onPause()
     {
         sendCommand("exit");
-        /*
         try
         {
             in.close();
             out.close();
             socket.close();
-        } catch (IOException e)
+        } catch (Exception e)
         {
             e.printStackTrace();
-        }*/
-        Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
+        }
+        //Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
@@ -133,7 +130,6 @@ public class Security extends Fragment
         {
             if (in.ready())  // Retrieve command from Android device, add to device queue
             {
-
                 status = in.readLine();
                 updateStatusUI();
                 System.out.println("Recieved: " + status);
@@ -153,7 +149,7 @@ public class Security extends Fragment
         public void run() {
 
             try {
-                socket = new Socket(ip, Integer.parseInt(port));
+                socket = new Socket(ipField, Integer.parseInt(portField));
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
