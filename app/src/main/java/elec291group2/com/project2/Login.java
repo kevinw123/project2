@@ -34,9 +34,7 @@ public class Login extends AppCompatActivity
 
         Button loginBtn = (Button) findViewById(R.id.login_button);
         pinField = (EditText) findViewById(R.id.pin_field);
-
-        // TO BE CHANGED
-        // ALLOW CHANGING PIN IN SETTINGS AND PROMPT USER ON FIRST OPEN TO SET THEIR PIN
+        
         pin = sharedPreferences.getString("PIN", "NOT ENTERED");
 
         if (pin.equals("NOT ENTERED"))
