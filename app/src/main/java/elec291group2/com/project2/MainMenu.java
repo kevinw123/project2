@@ -83,10 +83,8 @@ public class MainMenu extends AppCompatActivity
         }
         else
         {
-            Intent exitApp = new Intent(Intent.ACTION_MAIN);
-            exitApp.addCategory(Intent.CATEGORY_HOME);
-            exitApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(exitApp);
+            ((Toolbar) findViewById(R.id.toolbar)).setTitle("Overview");
+            getFragmentManager().beginTransaction().replace(R.id.relativeLayout, new Overview()).commit();
         }
     }
 
@@ -125,14 +123,5 @@ public class MainMenu extends AppCompatActivity
             dl.closeDrawers();
         }
         return true;
-    }
-
-    public void onDrawerOpened(View drawerView)
-    {
-        Menu menu = ((NavigationView) drawerView).getMenu();
-        ((NavigationView) drawerView).setNavigationItemSelectedListener(this);
-
-        menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", "not entered"));
-        menu.findItem(R.id.port).setTitle("Port: " + sharedPreferences.getString("Port", "not entered"));
     }
 }
