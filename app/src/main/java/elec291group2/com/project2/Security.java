@@ -2,17 +2,14 @@ package elec291group2.com.project2;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.SharedPreferences;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.net.Socket;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -20,18 +17,19 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Kevin on 2016-03-23.
  */
 public class Security extends Fragment
 {
+    SharedPreferences sharedPreferences;
+    View view;
     private Socket socket;
     private String ip;
     private String port;
-    SharedPreferences sharedPreferences;
-    View view;
-
 
     @Nullable
     @Override
@@ -56,6 +54,15 @@ public class Security extends Fragment
             }
         });
 
+        new Timer().scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Toast.makeText(getActivity(), "hi", Toast.LENGTH_SHORT).show();
+
+            }
+        }, 0, 1000);//put here time 1000 milliseconds=1 second
 
         return view;
     }
@@ -70,7 +77,8 @@ public class Security extends Fragment
 
     private void sendCommand(String command)
     {
-        try {
+        try
+        {
             PrintWriter out = new PrintWriter(new BufferedWriter(
                     new OutputStreamWriter(socket.getOutputStream())),
                     true);
@@ -101,5 +109,6 @@ public class Security extends Fragment
 
         }
     }
+
 
 }
