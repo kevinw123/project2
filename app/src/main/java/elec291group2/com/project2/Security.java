@@ -66,8 +66,6 @@ public class Security extends Fragment
 
         new Thread(new ClientThread()).start();
 
-
-
         kevin.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -76,8 +74,6 @@ public class Security extends Fragment
                 sendCommand("kevin");
             }
         });
-
-
 
         return view;
     }

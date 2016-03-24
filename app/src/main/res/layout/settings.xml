@@ -1,81 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/securityLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/securityLayout"
     android:background="@color/white">
 
     <TextView
+        android:id="@+id/ip_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="IP Address: "
-        android:id="@+id/ip_text"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:text="IP Address: "
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <EditText
+        android:id="@+id/ip_field"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/ip_field"
-        android:layout_below="@+id/ip_text"
-        android:layout_alignStart="@+id/ip_text"/>
+        android:layout_alignStart="@+id/ip_text"
+        android:layout_below="@+id/ip_text"/>
 
     <TextView
+        android:id="@+id/port_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Port: "
-        android:id="@+id/port_text"
-        android:layout_below="@+id/ip_text"
         android:layout_alignStart="@+id/ip_text"
-        android:layout_marginTop="50dp"/>
+        android:layout_below="@+id/ip_text"
+        android:layout_marginTop="50dp"
+        android:text="Port: "
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <EditText
+        android:id="@+id/port_field"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/port_field"
-        android:layout_below="@+id/port_text"
         android:layout_alignStart="@+id/port_text"
+        android:layout_below="@+id/port_text"
         android:inputType="number"/>
 
     <Button
+        android:id="@+id/data_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Data"
-        android:id="@+id/data_button"
-        android:layout_below="@+id/port_field"
         android:layout_alignStart="@+id/port_field"
-        android:layout_marginTop="10dp"/>
+        android:layout_below="@+id/port_field"
+        android:layout_marginTop="10dp"
+        android:text="Save Data"/>
 
     <TextView
+        android:id="@+id/pin_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="New PIN: "
-        android:id="@+id/pin_text"
-        android:layout_below="@+id/data_button"
         android:layout_alignStart="@+id/ip_text"
-        android:layout_marginTop="20dp"/>
+        android:layout_below="@+id/data_button"
+        android:layout_marginTop="20dp"
+        android:text="New PIN: "
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <EditText
+        android:id="@+id/pin_field"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/pin_field"
-        android:layout_below="@+id/pin_text"
         android:layout_alignStart="@+id/port_text"
+        android:layout_below="@+id/pin_text"
         android:inputType="textPassword"/>
 
     <Button
+        android:id="@+id/pin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change Pin"
-        android:id="@+id/pin_button"
-        android:layout_below="@+id/pin_field"
         android:layout_alignStart="@+id/port_field"
-        android:layout_marginTop="10dp"/>
+        android:layout_below="@+id/pin_field"
+        android:layout_marginTop="10dp"
+        android:text="Change Pin"/>
+
+    <TextView
+        android:id="@+id/notifs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/pin_button"
+        android:layout_below="@+id/pin_button"
+        android:layout_marginTop="20dp"
+        android:text="Notifications"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <ToggleButton
+        android:id="@+id/notif_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/pin_button"
+        android:layout_below="@+id/notifs"
+        android:layout_marginTop="10dp"
+        android:text="New ToggleButton"/>
 
 </RelativeLayout>
