@@ -12,5 +12,15 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Security"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView3"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/kevin"
+        android:layout_above="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_marginBottom="96dp"/>
 </RelativeLayout>
