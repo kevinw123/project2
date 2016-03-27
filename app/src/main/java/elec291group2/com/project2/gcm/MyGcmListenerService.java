@@ -33,18 +33,13 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
 
-
         /**
-         * Production applications would usually process the message here.
+         * TODO: Production applications would usually process the message here.
          * Eg: - Syncing with server.
          *     - Store message in local database.
          *     - Update UI.
          */
 
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
         sendNotification(message);
     }
 
@@ -62,7 +57,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_ic_notification) // TODO: notification icon?
-                .setContentTitle("GCM Message")
+                .setContentTitle("SmartHomeServer")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

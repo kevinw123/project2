@@ -10,4 +10,7 @@ public class constants {
 
     public static final String REGISTRATION_COMPLETE =
             "registration-complete";
+
+    public static final String GCM_SENDER_ID =
+            "107441647513";
 }
