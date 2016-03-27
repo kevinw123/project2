@@ -1,17 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/overviewLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/overviewLayout"
     android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/overview"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Overview"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:text="stick the camera thingy here"
+        android:id="@+id/textView10"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <!-- left column
+             contains security statuses -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Security Status"
+                android:layout_marginTop="350dp"
+                android:id="@+id/security_header"
+                android:layout_gravity="center_horizontal"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <!-- left of left column
+                         contains labels -->
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="System: "
+                        android:id="@+id/system_text"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="right"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Door: "
+                        android:id="@+id/door_text"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="right"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Motion: "
+                        android:id="@+id/motion_text"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="right"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Laser: "
+                        android:id="@+id/laser_text"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="right"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"/>
+
+                </LinearLayout>
+
+                <!-- right of left column
+                     contains statuses -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="-"
+                        android:id="@+id/system_status"
+                        android:layout_gravity="left"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="-"
+                        android:id="@+id/door_status"
+                        android:layout_gravity="left"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="-"
+                        android:id="@+id/motion_status"
+                        android:layout_gravity="left"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="-"
+                        android:id="@+id/laser_status"
+                        android:layout_gravity="left"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- right column
+             light statuses -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Lights"
+                android:gravity="center"
+                android:id="@+id/lights_header"
+                android:layout_marginTop="350dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Living Room"
+                android:textColor="@color/red"
+                android:id="@+id/livingroom_status"
+                android:gravity="center"
+                android:layout_below="@+id/lights_header"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Kitchen"
+                android:textColor="@color/red"
+                android:gravity="center"
+                android:id="@+id/kitchen_status"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Washroom"
+                android:textColor="@color/red"
+                android:id="@+id/washroom_status"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Bedroom"
+                android:textColor="@color/red"
+                android:id="@+id/bedroom_status"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Master Bedroom"
+                android:textColor="@color/red"
+                android:id="@+id/mbedroom_status"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="5dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

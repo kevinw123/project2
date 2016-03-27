@@ -57,12 +57,14 @@ public class Security extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.security, container, false);
+
+        // get the IP and port for socket
         sharedPreferences = this.getActivity().getSharedPreferences("serverData", Context.MODE_PRIVATE);
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
+
         Button kevin = (Button) view.findViewById(R.id.kevin);
         textStatus = (TextView) view.findViewById(R.id.status);
-
 
         new Thread(new ClientThread()).start();
 

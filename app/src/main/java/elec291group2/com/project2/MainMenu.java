@@ -28,6 +28,8 @@ public class MainMenu extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Overview");
+
         sharedPreferences = getSharedPreferences("serverData", Context.MODE_PRIVATE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -64,10 +66,13 @@ public class MainMenu extends AppCompatActivity
                 }
             });
             prompt.show();
+            toolbar.setTitle("Settings");
             getFragmentManager().beginTransaction().replace(R.id.relativeLayout, new Settings()).commit();
         }
         else
+        {
             getFragmentManager().beginTransaction().replace(R.id.relativeLayout, new Overview()).commit();
+        }
     }
 
     @Override

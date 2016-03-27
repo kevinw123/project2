@@ -33,6 +33,11 @@ public class Lights extends Fragment
     BufferedReader in;
     PrintWriter out;
     Handler handler;
+    private Socket socket;
+    private String ipField;
+    private String portField;
+    private String status;
+
     SharedPreferences sharedPreferences;
     View view;
     Button masterOnButton, masterOffButton, livingRoomButton, kitchenButton,
@@ -42,10 +47,7 @@ public class Lights extends Fragment
             washroomStatus = false,
             bedroomStatus = false,
             masterBedroomStatus = false;
-    private Socket socket;
-    private String ipField;
-    private String portField;
-    private String status;
+
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -211,7 +213,7 @@ public class Lights extends Fragment
             @Override
             public void run()
             {
-
+                updateAllButtons();
             }
         });
     }
