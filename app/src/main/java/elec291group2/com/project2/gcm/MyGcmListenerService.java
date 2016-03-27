@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import elec291group2.com.project2.MainMenu;
 
 public class MyGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = "MyGcmListenerService";
+    SharedPreferences sharedPreferences;
 
     /**
      * Called when message is received.
@@ -31,6 +32,7 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        // Get string from 'message' field
         String message = data.getString("message");
 
         /**
@@ -40,7 +42,14 @@ public class MyGcmListenerService extends GcmListenerService {
          *     - Update UI.
          */
 
-        sendNotification(message);
+        // Send notification if enabled in shared preferences.
+        sharedPreferences = getApplicationContext().getSharedPreferences(
+                "serverData", Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("Notifications", false))
+        {
+            sendNotification(message);
+        }
+
     }
 
     /**
