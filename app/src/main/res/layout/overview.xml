@@ -100,6 +100,18 @@
                         android:paddingRight="5dp"
                         android:paddingTop="5dp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Alarm: "
+                        android:id="@+id/alarm_text"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_gravity="right"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"/>
+
                 </LinearLayout>
 
                 <!-- right of left column
@@ -146,6 +158,16 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="-"
                         android:id="@+id/laser_status"
+                        android:layout_gravity="left"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="-"
+                        android:id="@+id/alarm_status"
                         android:layout_gravity="left"
                         android:paddingLeft="5dp"
                         android:paddingTop="5dp"/>

@@ -38,7 +38,7 @@ public class Overview extends Fragment
     private String ipField;
     private String portField;
 
-    // status: { systemStatus, doorStatus, motionStatus, laserStatus,
+    // status: { systemStatus, doorStatus, motionStatus, laserStatus, alarmStatus
     //           livingRoomLights, kitchenLights, washroomLights, bedroomLights, masterBedroomLights }
     private String status;
 
@@ -55,7 +55,7 @@ public class Overview extends Fragment
         }
     };
 
-    TextView systemText, doorText, motionText, laserText, // security system
+    TextView systemText, doorText, motionText, laserText, alarmText, // security system
             livingText, kitchenText, washroomText, bedroomText, masterBedroomText; // lights
 
     @Nullable
@@ -74,6 +74,7 @@ public class Overview extends Fragment
         doorText = (TextView) view.findViewById(R.id.door_status);
         motionText = (TextView) view.findViewById(R.id.motion_status);
         laserText = (TextView) view.findViewById(R.id.laser_status);
+        alarmText = (TextView) view.findViewById(R.id.alarm_status);
         // lights status
         livingText = (TextView) view.findViewById(R.id.livingroom_status);
         kitchenText = (TextView) view.findViewById(R.id.kitchen_status);
@@ -94,7 +95,8 @@ public class Overview extends Fragment
         int systemStatus = Character.getNumericValue(status.charAt(0)),
             doorStatus = Character.getNumericValue(status.charAt(1)),
             motionStatus = Character.getNumericValue(status.charAt(2)),
-            laserStatus = Character.getNumericValue(status.charAt(3));
+            laserStatus = Character.getNumericValue(status.charAt(3)),
+            alarmStatus = Character.getNumericValue(status.charAt(4));
 
         // systemStatus: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
         systemText.setText(systemStatus == 0 ? "UNARMED" :
@@ -102,27 +104,31 @@ public class Overview extends Fragment
         systemText.setTextColor(systemStatus == 0 ? Color.GREEN :
                 systemStatus == 1 ? Color.BLUE : Color.RED);
 
-        // doorStatus: 0 = closed (G), 1 = open (M), 2 = armed (B), 3 = triggered (R)
+        // doorStatus: 0 = closed (G), 1 = armed (B), 2 = open (M), 3 = triggered (R)
         doorText.setText(doorStatus == 0 ? "CLOSED" :
-                doorStatus == 1 ? "OPEN" :
-                doorStatus == 2 ? "ARMED" : "TRIGGERED");
+                doorStatus == 1 ? "ARMED" :
+                doorStatus == 2 ? "OPEN" : "TRIGGERED");
         doorText.setTextColor(doorStatus == 0 ? Color.GREEN :
-                doorStatus == 1 ? Color.MAGENTA :
-                doorStatus == 2 ? Color.BLUE : Color.RED);
+                doorStatus == 1 ? Color.BLUE :
+                doorStatus == 2 ? Color.MAGENTA : Color.RED);
 
-        // motionStatus: 0 = idle (G), 1 = movement (M), 2 = armed (B), 3 = triggered (R)
+        // motionStatus: 0 = idle (G), 1 = armed (B), 2 = detected (M), 3 = triggered (R)
         motionText.setText(motionStatus == 0 ? "IDLE" :
-                motionStatus == 1 ? "DETECTED" :
-                motionStatus == 2 ? "ARMED" : "TRIGGERED");
+                motionStatus == 1 ? "ARMED" :
+                motionStatus == 2 ? "DETECTED" : "TRIGGERED");
         motionText.setTextColor(motionStatus == 0 ? Color.GREEN :
-                motionStatus == 1 ? Color.MAGENTA :
-                        motionStatus == 2 ? Color.BLUE : Color.RED);
+                motionStatus == 1 ? Color.BLUE :
+                        motionStatus == 2 ? Color.MAGENTA : Color.RED);
 
         // motionStatus: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
         laserText.setText(laserStatus == 0 ? "UNARMED" :
                 laserStatus == 1 ? "ARMED" : "TRIGGERED");
         laserText.setTextColor(laserStatus == 0 ? Color.GREEN :
                 laserStatus == 1 ? Color.BLUE : Color.RED);
+
+        // alarmStatus: 0 = off (R), 1 = on (G)
+        alarmText.setText(alarmStatus == 0 ? "OFF" : "ON");
+        alarmText.setTextColor(alarmStatus == 0 ? Color.RED : Color.GREEN);
     }
 
     /**
@@ -130,11 +136,11 @@ public class Overview extends Fragment
      */
     public void updateLights()
     {
-        int livingRoomLights = Character.getNumericValue(status.charAt(4)),
-            kitchenLights = Character.getNumericValue(status.charAt(5)),
-            washroomLights = Character.getNumericValue(status.charAt(6)),
-            bedroomLights = Character.getNumericValue(status.charAt(7)),
-            masterBedroomLights = Character.getNumericValue(status.charAt(8));
+        int livingRoomLights = Character.getNumericValue(status.charAt(5)),
+            kitchenLights = Character.getNumericValue(status.charAt(6)),
+            washroomLights = Character.getNumericValue(status.charAt(7)),
+            bedroomLights = Character.getNumericValue(status.charAt(8)),
+            masterBedroomLights = Character.getNumericValue(status.charAt(9));
 
         // 0 = on (R), 1 = off (G)
         livingText.setTextColor(livingRoomLights == 0 ? Color.RED : Color.GREEN);

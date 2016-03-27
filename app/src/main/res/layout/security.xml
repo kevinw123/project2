@@ -6,30 +6,211 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/textView3"
+    <ImageView
+        android:id="@+id/house"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Security"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:src="@drawable/house"/>
 
     <Button
-        android:id="@+id/kevin"
+        android:id="@+id/master_arm_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_marginBottom="96dp"
-        android:text="New Button"/>
+        android:layout_alignTop="@+id/master_disarm_button"
+        android:layout_toStartOf="@+id/master_disarm_button"
+        android:text="Arm"/>
+
+    <Button
+        android:id="@+id/master_disarm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/house"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="50dp"
+        android:text="Disarm"/>
+
+    <Button
+        android:id="@+id/door_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/master_disarm_button"
+        android:layout_below="@+id/master_disarm_button"
+        android:layout_marginTop="10dp"
+        android:text="Toggle"/>
+
+    <Button
+        android:id="@+id/motion_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/door_button"
+        android:layout_below="@+id/door_button"
+        android:layout_marginTop="10dp"
+        android:text="Toggle"/>
+
+    <Button
+        android:id="@+id/laser_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/motion_button"
+        android:layout_below="@+id/motion_button"
+        android:layout_marginTop="10dp"
+        android:text="Toggle"/>
+
+    <Button
+        android:id="@+id/alarm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/laser_button"
+        android:layout_below="@+id/laser_button"
+        android:layout_marginTop="10dp"
+        android:text="Toggle"/>
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/master"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="41dp"
-        android:text="New Text"/>
+        android:layout_above="@+id/door_button"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="50dp"
+        android:text="Master Control"
+        android:textColor="@color/black"
+        android:layout_alignTop="@+id/master_arm_button"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Door System"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignTop="@+id/door_button"
+        android:layout_alignStart="@+id/master"/>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Motion Detection"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignTop="@+id/motion_button"
+        android:layout_alignStart="@+id/textView5"/>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Laser System"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignTop="@+id/laser_button"
+        android:layout_alignStart="@+id/textView6"/>
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alarm"
+        android:textColor="@color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignTop="@+id/alarm_button"
+        android:layout_alignStart="@+id/textView7"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status: "
+        android:id="@+id/status1"
+        android:layout_above="@+id/door_button"
+        android:layout_alignStart="@+id/master"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status: "
+        android:id="@+id/status2"
+        android:layout_alignBottom="@+id/door_button"
+        android:layout_alignStart="@+id/textView5"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status: "
+        android:id="@+id/status3"
+        android:layout_above="@+id/laser_button"
+        android:layout_alignStart="@+id/textView6"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status: "
+        android:id="@+id/status4"
+        android:layout_above="@+id/alarm_button"
+        android:layout_alignStart="@+id/textView7"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Status: "
+        android:id="@+id/status5"
+        android:layout_alignBottom="@+id/alarm_button"
+        android:layout_alignStart="@+id/textView8"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="-"
+        android:id="@+id/system_status"
+        android:layout_above="@+id/door_button"
+        android:layout_toEndOf="@+id/status1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="-"
+        android:id="@+id/door_status"
+        android:layout_alignBottom="@+id/status2"
+        android:layout_toEndOf="@+id/status2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="-"
+        android:id="@+id/motion_status"
+        android:layout_above="@+id/laser_button"
+        android:layout_toEndOf="@+id/status3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="-"
+        android:id="@+id/laser_status"
+        android:layout_alignBottom="@+id/status4"
+        android:layout_toEndOf="@+id/status4"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="-"
+        android:id="@+id/alarm_status"
+        android:layout_alignTop="@+id/status5"
+        android:layout_toEndOf="@+id/status4"/>
+
+
 </RelativeLayout>
