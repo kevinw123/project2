@@ -78,4 +78,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- GCM application sender ID values -->
+    <string name="gcm_sender_id">107441647513</string>
+
 </resources>
