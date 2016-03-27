@@ -202,17 +202,16 @@ public class Overview extends Fragment
 
     }
 
-
-    class ClientThread implements Runnable {
-
+    class ClientThread implements Runnable
+    {
         @Override
-        public void run() {
-
-            try {
+        public void run()
+        {
+            try
+            {
                 socket = new Socket(ipField, Integer.parseInt(portField));
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
             } catch (IOException e1) {

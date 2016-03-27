@@ -36,12 +36,19 @@ public class Lights extends Fragment
     private Socket socket;
     private String ipField;
     private String portField;
-    private String status;
+
+    private String status = "111111111"; //temp status placeholder
 
     SharedPreferences sharedPreferences;
     View view;
-    Button masterOnButton, masterOffButton, livingRoomButton, kitchenButton,
-            washroomButton, bedroomButton, masterBedroomButton;
+
+    Button  masterOnButton,
+            masterOffButton,
+            livingRoomButton,
+            kitchenButton,
+            washroomButton,
+            bedroomButton,
+            masterBedroomButton;
     boolean livingRoomStatus = false,
             kitchenStatus = false,
             washroomStatus = false,
@@ -53,7 +60,7 @@ public class Lights extends Fragment
         @Override
         public void run()
         {
-      /* do what you need to do */
+        /* do what you need to do */
 
             getStatus();
             // Call itself every 500 ms
@@ -78,15 +85,16 @@ public class Lights extends Fragment
         bedroomButton = (Button) view.findViewById(R.id.bedroom_button);
         masterBedroomButton = (Button) view.findViewById(R.id.mbedroom_button);
 
-        updateAllButtons();
+        //updateAllButtons();
 
         masterOnButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                masterControl(ON);
-                sendCommand("All Lights: On");
+                sendCommand("Master ON");
+
+                masterControl(ON); //to be removed once receive is functional
             }
         });
 
@@ -95,8 +103,10 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                masterControl(OFF);
-                sendCommand("All Lights: Off");
+                sendCommand("Master OFF");
+
+                masterControl(OFF); //to be removed once receive is functional
+
             }
         });
 
@@ -105,9 +115,10 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                livingRoomStatus = !livingRoomStatus;
-                updateButton(livingRoomButton, livingRoomStatus);
-                sendCommand("Living Room: " + (livingRoomStatus ? "On" : "Off"));
+                sendCommand("Living " + (livingRoomStatus ? "ON" : "OFF"));
+
+                updateButton(livingRoomButton, livingRoomStatus); //to be removed once receive is functional
+
             }
         });
 
@@ -116,8 +127,9 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                kitchenStatus = !kitchenStatus;
-                updateButton(kitchenButton, kitchenStatus);
+                sendCommand("Kitchen " + (kitchenStatus ? "ON" : "OFF"));
+
+                updateButton(kitchenButton, kitchenStatus); //to be removed once receive is functional
             }
         });
 
@@ -126,8 +138,9 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                washroomStatus = !washroomStatus;
-                updateButton(washroomButton, washroomStatus);
+                sendCommand("Washroom " + (washroomStatus ? "ON" : "OFF"));
+
+                updateButton(washroomButton, washroomStatus); //to be removed once receive is functional
             }
         });
 
@@ -136,8 +149,9 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                bedroomStatus = !bedroomStatus;
-                updateButton(bedroomButton, bedroomStatus);
+                sendCommand("Bedroom " + (bedroomStatus ? "ON" : "OFF"));
+
+                updateButton(bedroomButton, bedroomStatus); //to be removed once receive is functional
             }
         });
 
@@ -146,8 +160,9 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                masterBedroomStatus = !masterBedroomStatus;
-                updateButton(masterBedroomButton, masterBedroomStatus);
+                sendCommand("MasterBedroom " + (masterBedroomStatus ? "ON" : "OFF"));
+
+                updateButton(masterBedroomButton, masterBedroomStatus); //to be removed once receive is functional
             }
         });
 
@@ -173,22 +188,32 @@ public class Lights extends Fragment
         super.onPause();
     }
 
+    public void updateAllButtons()
+    {
+        // update status of the lights
+        livingRoomStatus = Character.getNumericValue(status.charAt(4)) == 1 ? ON : OFF;
+        kitchenStatus = Character.getNumericValue(status.charAt(5)) == 1 ? ON : OFF;
+        washroomStatus = Character.getNumericValue(status.charAt(6)) == 1 ? ON : OFF;
+        bedroomStatus = Character.getNumericValue(status.charAt(7)) == 1 ? ON : OFF;
+        masterBedroomStatus = Character.getNumericValue(status.charAt(8)) == 1 ? ON : OFF;
+
+        // update buttons with new statuses
+        updateButton(livingRoomButton, livingRoomStatus);
+        updateButton(kitchenButton, kitchenStatus);
+        updateButton(washroomButton, washroomStatus);
+        updateButton(bedroomButton, bedroomStatus);
+        updateButton(masterBedroomButton, masterBedroomStatus);
+    }
+
     public void updateButton(Button btn, boolean status)
     {
         btn.setText(status ? "ON" : "OFF");
         btn.getBackground().setColorFilter(status ? Color.GREEN : Color.RED, PorterDuff.Mode.MULTIPLY);
     }
 
-    public void updateAllButtons()
-    {
-        updateButton(livingRoomButton, livingRoomStatus);
-        updateButton(kitchenButton, kitchenStatus);
-        updateButton(livingRoomButton, livingRoomStatus);
-        updateButton(washroomButton, washroomStatus);
-        updateButton(bedroomButton, bedroomStatus);
-        updateButton(masterBedroomButton, masterBedroomStatus);
-    }
-
+    /**
+     * TO BE REMOVED
+     */
     public void masterControl(boolean status)
     {
         livingRoomStatus = kitchenStatus = washroomStatus = bedroomStatus = masterBedroomStatus = status;
@@ -240,11 +265,9 @@ public class Lights extends Fragment
 
     class ClientThread implements Runnable
     {
-
         @Override
         public void run()
         {
-
             try
             {
                 socket = new Socket(ipField, Integer.parseInt(portField));
