@@ -3,10 +3,10 @@ package elec291group2.com.project2;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,7 +30,7 @@ public class MainMenu extends AppCompatActivity
         setSupportActionBar(toolbar);
         toolbar.setTitle("Overview");
 
-        sharedPreferences = getSharedPreferences("serverData", Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -50,6 +50,7 @@ public class MainMenu extends AppCompatActivity
 
         if (ip.equals("NOT ENTERED") || port.equals("NOT ENTERED"))
         {
+            toolbar.setTitle("Settings");
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);
             prompt.setMessage("Please enter your IP address and port.");
             prompt.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
@@ -58,15 +59,7 @@ public class MainMenu extends AppCompatActivity
                 {
                 }
             });
-            prompt.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener()
-            {
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    onBackPressed();
-                }
-            });
             prompt.show();
-            toolbar.setTitle("Settings");
             getFragmentManager().beginTransaction().replace(R.id.relativeLayout, new Settings()).commit();
         }
         else

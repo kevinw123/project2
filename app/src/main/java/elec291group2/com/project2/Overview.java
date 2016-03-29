@@ -1,12 +1,12 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,14 +34,14 @@ public class Overview extends Fragment
     BufferedReader in;
     PrintWriter out;
     Handler handler;
+    TextView systemText, doorText, motionText, laserText, alarmText, // security system
+            livingText, kitchenText, washroomText, bedroomText, masterBedroomText; // lights
     private Socket socket;
     private String ipField;
     private String portField;
-
     // status: { systemStatus, doorStatus, motionStatus, laserStatus, alarmStatus
     //           livingRoomLights, kitchenLights, washroomLights, bedroomLights, masterBedroomLights }
     private String status;
-
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -55,9 +55,6 @@ public class Overview extends Fragment
         }
     };
 
-    TextView systemText, doorText, motionText, laserText, alarmText, // security system
-            livingText, kitchenText, washroomText, bedroomText, masterBedroomText; // lights
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -65,7 +62,7 @@ public class Overview extends Fragment
         view = inflater.inflate(R.layout.overview, container, false);
 
         // get the IP and port for socket
-        sharedPreferences = this.getActivity().getSharedPreferences("serverData", Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
 
@@ -93,10 +90,10 @@ public class Overview extends Fragment
     public void updateSecurity()
     {
         int systemStatus = Character.getNumericValue(status.charAt(0)),
-            doorStatus = Character.getNumericValue(status.charAt(1)),
-            motionStatus = Character.getNumericValue(status.charAt(2)),
-            laserStatus = Character.getNumericValue(status.charAt(3)),
-            alarmStatus = Character.getNumericValue(status.charAt(4));
+                doorStatus = Character.getNumericValue(status.charAt(1)),
+                motionStatus = Character.getNumericValue(status.charAt(2)),
+                laserStatus = Character.getNumericValue(status.charAt(3)),
+                alarmStatus = Character.getNumericValue(status.charAt(4));
 
         // systemStatus: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
         systemText.setText(systemStatus == 0 ? "UNARMED" :
@@ -107,15 +104,15 @@ public class Overview extends Fragment
         // doorStatus: 0 = closed (G), 1 = armed (B), 2 = open (M), 3 = triggered (R)
         doorText.setText(doorStatus == 0 ? "CLOSED" :
                 doorStatus == 1 ? "ARMED" :
-                doorStatus == 2 ? "OPEN" : "TRIGGERED");
+                        doorStatus == 2 ? "OPEN" : "TRIGGERED");
         doorText.setTextColor(doorStatus == 0 ? Color.GREEN :
                 doorStatus == 1 ? Color.BLUE :
-                doorStatus == 2 ? Color.MAGENTA : Color.RED);
+                        doorStatus == 2 ? Color.MAGENTA : Color.RED);
 
         // motionStatus: 0 = idle (G), 1 = armed (B), 2 = detected (M), 3 = triggered (R)
         motionText.setText(motionStatus == 0 ? "IDLE" :
                 motionStatus == 1 ? "ARMED" :
-                motionStatus == 2 ? "DETECTED" : "TRIGGERED");
+                        motionStatus == 2 ? "DETECTED" : "TRIGGERED");
         motionText.setTextColor(motionStatus == 0 ? Color.GREEN :
                 motionStatus == 1 ? Color.BLUE :
                         motionStatus == 2 ? Color.MAGENTA : Color.RED);
@@ -137,10 +134,10 @@ public class Overview extends Fragment
     public void updateLights()
     {
         int livingRoomLights = Character.getNumericValue(status.charAt(5)),
-            kitchenLights = Character.getNumericValue(status.charAt(6)),
-            washroomLights = Character.getNumericValue(status.charAt(7)),
-            bedroomLights = Character.getNumericValue(status.charAt(8)),
-            masterBedroomLights = Character.getNumericValue(status.charAt(9));
+                kitchenLights = Character.getNumericValue(status.charAt(6)),
+                washroomLights = Character.getNumericValue(status.charAt(7)),
+                bedroomLights = Character.getNumericValue(status.charAt(8)),
+                masterBedroomLights = Character.getNumericValue(status.charAt(9));
 
         // 0 = on (R), 1 = off (G)
         livingText.setTextColor(livingRoomLights == 0 ? Color.RED : Color.GREEN);
@@ -218,9 +215,17 @@ public class Overview extends Fragment
                 socket = new Socket(ipField, Integer.parseInt(portField));
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            } catch (UnknownHostException e1) {
+            }
+            catch (UnknownHostException e1)
+            {
                 e1.printStackTrace();
-            } catch (IOException e1) {
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+            catch (NumberFormatException e1)
+            {
                 e1.printStackTrace();
             }
             Looper.prepare();

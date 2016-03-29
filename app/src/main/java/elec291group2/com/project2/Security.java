@@ -1,13 +1,12 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,13 +37,7 @@ public class Security extends Fragment
     BufferedReader in;
     PrintWriter out;
     Handler handler;
-    private Socket socket;
-    private String ipField;
-    private String portField;
-
-    private String status = "1111111111";
-
-    Button  masterArmButton,
+    Button masterArmButton,
             masterDisarmButton,
             doorButton,
             motionButton,
@@ -56,7 +49,10 @@ public class Security extends Fragment
             laserStatus = false,
             alarmStatus = false;
     TextView systemText, doorText, motionText, laserText, alarmText; // security system
-
+    private Socket socket;
+    private String ipField;
+    private String portField;
+    private String status = "1111111111";
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -77,7 +73,7 @@ public class Security extends Fragment
         view = inflater.inflate(R.layout.security, container, false);
 
         // get the IP and port for socket
-        sharedPreferences = this.getActivity().getSharedPreferences("serverData", Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
 
@@ -288,19 +284,30 @@ public class Security extends Fragment
     }
 
 
-    class ClientThread implements Runnable {
+    class ClientThread implements Runnable
+    {
 
         @Override
-        public void run() {
+        public void run()
+        {
 
-            try {
+            try
+            {
                 socket = new Socket(ipField, Integer.parseInt(portField));
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
-            } catch (UnknownHostException e1) {
+            }
+            catch (UnknownHostException e1)
+            {
                 e1.printStackTrace();
-            } catch (IOException e1) {
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+            catch (NumberFormatException e1)
+            {
                 e1.printStackTrace();
             }
             Looper.prepare();

@@ -1,11 +1,11 @@
 package elec291group2.com.project2;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -30,7 +30,7 @@ public class Login extends AppCompatActivity
         setContentView(R.layout.login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        sharedPreferences = getSharedPreferences("serverData", Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Button loginBtn = (Button) findViewById(R.id.login_button);
         pinField = (EditText) findViewById(R.id.pin_field);

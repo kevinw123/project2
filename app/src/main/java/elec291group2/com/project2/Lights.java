@@ -1,13 +1,12 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,16 +34,9 @@ public class Lights extends Fragment
     BufferedReader in;
     PrintWriter out;
     Handler handler;
-    private Socket socket;
-    private String ipField;
-    private String portField;
-
-    private String status = "1111111111"; //temp status placeholder
-
     SharedPreferences sharedPreferences;
     View view;
-
-    Button  masterOnButton,
+    Button masterOnButton,
             masterOffButton,
             livingRoomButton,
             kitchenButton,
@@ -61,7 +53,10 @@ public class Lights extends Fragment
             washroomStatus = false,
             bedroomStatus = false,
             masterBedroomStatus = false;
-
+    private Socket socket;
+    private String ipField;
+    private String portField;
+    private String status = "1111111111"; //temp status placeholder
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -79,7 +74,7 @@ public class Lights extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        sharedPreferences = this.getActivity().getSharedPreferences("serverData", Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
         view = inflater.inflate(R.layout.lights, container, false);
@@ -306,10 +301,16 @@ public class Lights extends Fragment
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
-            } catch (UnknownHostException e1)
+            }
+            catch (UnknownHostException e1)
             {
                 e1.printStackTrace();
-            } catch (IOException e1)
+            }
+            catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+            catch (NumberFormatException e1)
             {
                 e1.printStackTrace();
             }
