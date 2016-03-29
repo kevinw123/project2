@@ -2,6 +2,7 @@ package elec291group2.com.project2;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -72,6 +73,13 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             editTextPreference.setSummary(editTextPreference.getText());
             SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
             preference.setSummary(sharedPrefs.getString(key, ""));
+        }
+        else if (preference instanceof CheckBoxPreference)
+        {
+            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
+            checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
+            SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+            preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
         }
     }
 }

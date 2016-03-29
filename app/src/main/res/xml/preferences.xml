@@ -1,26 +1,36 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:digits="0123456789."
-        android:inputType="numberDecimal"
-        android:key="IP"
-        android:summary="Your IP Address"
-        android:title="IP Address"/>
+    <PreferenceCategory
+        android:title="Server Information">
 
-    <EditTextPreference
-        android:inputType="numberDecimal"
-        android:key="Port"
-        android:summary="Enter port number 0-65536"
-        android:title="Port"/>
+        <EditTextPreference
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            android:key="IP"
+            android:summary="Your IP Address"
+            android:title="IP Address"/>
 
-    <EditTextPreference
-        android:inputType="numberPassword"
-        android:key="PIN"
-        android:title="Change your PIN"/>
+        <EditTextPreference
+            android:inputType="numberDecimal"
+            android:key="Port"
+            android:summary="Enter port number 0-65536"
+            android:title="Port"/>
 
-    <CheckBoxPreference
-        android:key="Notifications"
-        android:title="Enable/Disable Notifications"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="User Settings">
+
+        <EditTextPreference
+            android:inputType="numberPassword"
+            android:key="PIN"
+            android:title="Set your PIN"/>
+
+        <CheckBoxPreference
+            android:key="Notifications"
+            android:title="Notifications"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
