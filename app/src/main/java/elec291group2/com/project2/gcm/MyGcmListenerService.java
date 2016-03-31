@@ -35,13 +35,6 @@ public class MyGcmListenerService extends GcmListenerService {
         // Get string from 'message' field
         String message = data.getString("message");
 
-        /**
-         * TODO: Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
         // Send notification if enabled in shared preferences.
         sharedPreferences = getApplicationContext().getSharedPreferences(
                 "serverData", Context.MODE_PRIVATE);
@@ -65,7 +58,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_ic_notification) // TODO: notification icon?
+                .setSmallIcon(R.mipmap.appicon)
                 .setContentTitle("SmartHomeServer")
                 .setContentText(message)
                 .setAutoCancel(true)

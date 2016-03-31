@@ -74,8 +74,8 @@ public class Security extends Fragment
 
         // get the IP and port for socket
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        ipField = sharedPreferences.getString("IP", "NOT ENTERED");
-        portField = sharedPreferences.getString("Port", "NOT ENTERED");
+        ipField = sharedPreferences.getString("IP", "Not set");
+        portField = sharedPreferences.getString("Port", "Not set");
 
         // system arming buttons
         masterArmButton = (Button) view.findViewById(R.id.master_arm_button);

@@ -76,8 +76,8 @@ public class Lights extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        ipField = sharedPreferences.getString("IP", "NOT ENTERED");
-        portField = sharedPreferences.getString("Port", "NOT ENTERED");
+        ipField = sharedPreferences.getString("IP", "Not set");
+        portField = sharedPreferences.getString("Port", "Not set");
         auth_key = sharedPreferences.getString("auth_key","abc123");
 
         view = inflater.inflate(R.layout.lights, container, false);

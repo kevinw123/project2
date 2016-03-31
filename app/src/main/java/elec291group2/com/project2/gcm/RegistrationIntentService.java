@@ -5,7 +5,6 @@ package elec291group2.com.project2.gcm;
  *
  */
 
-import elec291group2.com.project2.R;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -14,29 +13,24 @@ import android.os.Looper;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
-import elec291group2.com.project2.gcm.constants;
-
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     SharedPreferences sharedPreferences;
-    Boolean registrationStatus;
+    Boolean registrationResult;
 
     public RegistrationIntentService() {
         super(TAG);
-        registrationStatus = false;
+        registrationResult = true;
     }
 
     @Override
@@ -51,46 +45,55 @@ public class RegistrationIntentService extends IntentService {
             String token = instanceID.getToken(constants.GCM_SENDER_ID,
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-            sendRegistrationToServer(token);
+            try
+            {
+                sendRegistrationToServer(token);
+            }
+            catch (IOException | NumberFormatException e)
+            {
+                e.printStackTrace();
+                registrationResult = false;
+                showToast(constants.MESSAGE_APP_SERVER_ERROR);
+            }
 
-            registrationStatus = true;
-            showToast("Successfully registered to push notification server: " + token);
+            // If registration completed successful
+            if (registrationResult)
+                showToast(constants.MESSAGE_REGISTRATION_SUCCESS + token);
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            registrationStatus = false;
-            showToast("Failed to register to push notification server");
+            e.printStackTrace();
+            registrationResult = false;
+            showToast(constants.MESSAGE_GCM_SERVER_ERROR);
         }
 
         // Update shared preferences
-        sharedPreferences.edit().putBoolean("Notifications", registrationStatus).apply();
+        sharedPreferences.edit().putBoolean("Notifications", registrationResult).apply();
 
         // Broadcast that registration is completed.
-        Intent localIntent = new Intent(constants.REGISTRATION_COMPLETE);
+        Intent localIntent = new Intent(constants.BROADCAST_REGISTRATION_COMPLETE);
+        localIntent.putExtra("registrationResult", registrationResult);
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
-
     }
 
     /**
-     * Persist registration to app server.
+     * Persist registration to app/home server.
      *
-     * @param token The new token.
+     * @param token The device token.
+     * @throws IOException If there was an error connecting/writing to app server
+     * @throws NumberFormatException If the port was not set correctly in settings
      */
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(String token) throws IOException, NumberFormatException{
         String command = "register" + token;
-        String ipField = sharedPreferences.getString("IP", "NOT ENTERED");
-        String portField = sharedPreferences.getString("Port", "NOT ENTERED");
-        Socket socket;
-        PrintWriter out;
-        try {
-            socket = new Socket(ipField, Integer.parseInt(portField));
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            out.println(command);
-            out.close();
-            socket.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        String ipField = sharedPreferences.getString("IP", "Not set");
+        String portField = sharedPreferences.getString("Port", "Not set");
+        Socket socket = new Socket(ipField, Integer.parseInt(portField));
+        PrintWriter out =
+                new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+
+        out.println(command);
+        out.close();
+        socket.close();
     }
 
     /**

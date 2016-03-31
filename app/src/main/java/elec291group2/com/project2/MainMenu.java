@@ -42,13 +42,13 @@ public class MainMenu extends AppCompatActivity
         Menu menu = nv.getMenu();
         nv.setNavigationItemSelectedListener(this);
 
-        String ip = sharedPreferences.getString("IP", "NOT ENTERED");
-        String port = sharedPreferences.getString("Port", "NOT ENTERED");
+        String ip = sharedPreferences.getString("IP", "Not set");
+        String port = sharedPreferences.getString("Port", "Not set");
 
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + ip);
         menu.findItem(R.id.port).setTitle("Port: " + port);
 
-        if (ip.equals("NOT ENTERED") || port.equals("NOT ENTERED"))
+        if (ip.equals("Not set") || port.equals("Not set"))
         {
             toolbar.setTitle("Settings");
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);

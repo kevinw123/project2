@@ -30,14 +30,15 @@ public class Login extends AppCompatActivity
         setContentView(R.layout.login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Button loginBtn = (Button) findViewById(R.id.login_button);
         pinField = (EditText) findViewById(R.id.pin_field);
 
-        pin = sharedPreferences.getString("PIN", "NOT ENTERED");
+        pin = sharedPreferences.getString("PIN", "Not set");
 
-        if (pin.equals("NOT ENTERED"))
+        if (pin.equals("Not set"))
         {
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);
             prompt.setMessage("Please set a security PIN.");
@@ -54,7 +55,7 @@ public class Login extends AppCompatActivity
                     editor.putString("PIN", input.getText().toString());
                     editor.commit();
                     Toast.makeText(getApplicationContext(), "Pin set.", Toast.LENGTH_SHORT).show();
-                    pin = sharedPreferences.getString("PIN", "NOT ENTERED");
+                    pin = sharedPreferences.getString("PIN", "Not set");
                 }
             });
             prompt.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener()

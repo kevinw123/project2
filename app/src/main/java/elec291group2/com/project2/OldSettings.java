@@ -70,8 +70,8 @@ public class OldSettings extends Fragment
                 editor.commit();
 
                 Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
-                menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", "not entered"));
-                menu.findItem(R.id.port).setTitle("Port: " + sharedPreferences.getString("Port", "not entered"));
+                menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", "Not set"));
+                menu.findItem(R.id.port).setTitle("Port: " + sharedPreferences.getString("Port", "Not set"));
 
                 Toast.makeText(getActivity(), "IP address updated to " + ipField.getText().toString() + "\n" +
                         "Port updated to " + portField.getText().toString(), Toast.LENGTH_LONG).show();
@@ -110,7 +110,7 @@ public class OldSettings extends Fragment
                             if (!notifications) { notifToggle.setChecked(false); }
                         }
                     };
-                    IntentFilter intentFilter = new IntentFilter(constants.REGISTRATION_COMPLETE);
+                    IntentFilter intentFilter = new IntentFilter(constants.BROADCAST_REGISTRATION_COMPLETE);
                     LocalBroadcastManager.getInstance(context).
                             registerReceiver(registrationBroadcastReceiver, intentFilter);
 

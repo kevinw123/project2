@@ -7,26 +7,31 @@
         >
 
         <EditTextPreference
+            android:icon="@drawable/ic_language_24dp"
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="IP"
-            android:summary="Your IP Address"
-            android:icon="@drawable/ic_language_24dp"
-            android:title="IP Address"/>
+            android:defaultValue="Not set"
+            android:title="IP Address"
+            android:dialogTitle="Enter home server IP address"
+            />
 
         <EditTextPreference
+            android:icon="@drawable/ic_desktop_mac_24dp"
             android:inputType="numberDecimal"
             android:key="Port"
-            android:summary="Enter port number 0-65536"
-            android:icon="@drawable/ic_desktop_mac_24dp"
-            android:title="Port"/>
+            android:defaultValue="Not set"
+            android:title="Port"
+            android:dialogTitle="Enter port number 0-65536"
+            />
 
         <EditTextPreference
+            android:icon="@drawable/ic_vpn_key_24dp"
             android:inputType="textPassword"
             android:key="auth_key"
-            android:summary="Enter the key as set on the server."
+            android:defaultValue="Not set"
             android:title="Authentication Key"
-            android:icon="@drawable/ic_vpn_key_24dp"
+            android:dialogTitle="Enter the key as set on the server."
             />
 
     </PreferenceCategory>
@@ -41,7 +46,8 @@
             android:icon="@drawable/ic_dialpad_24dp"/>
         <CheckBoxPreference
             android:key="Notifications"
-            android:title="Notifications"/>
+            android:title="Notifications"
+            />
 
     </PreferenceCategory>
 
