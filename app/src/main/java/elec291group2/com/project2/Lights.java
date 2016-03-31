@@ -382,7 +382,6 @@ public class Lights extends Fragment
         {
             try
             {
-
                 socket = new Socket(ipField, Integer.parseInt(portField));
 
                 if (socket != null) // TODO: Find a valid condition to check

@@ -3,7 +3,7 @@ package elec291group2.com.project2;
 /**
  * Created by timot on 3/31/2016.
  */
-public class encrytionFunction
+public class EncryptionFunction
 {
     static private String[] keys =
             {"ke", "vI", "ca", "da", "la", "HA", "HS", "8*", "-o", "8^",

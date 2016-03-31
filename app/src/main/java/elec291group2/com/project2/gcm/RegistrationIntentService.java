@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,6 +28,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.NumberFormat;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -41,9 +46,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        sharedPreferences = getApplicationContext().getSharedPreferences(
-                             "serverData", Context.MODE_PRIVATE);
-
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         try
         {
             // Get device token from GCM server
@@ -51,16 +54,7 @@ public class RegistrationIntentService extends IntentService {
             String token = instanceID.getToken(constants.GCM_SENDER_ID,
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-            try
-            {
-                sendRegistrationToServer(token);
-            }
-            catch (IOException | NumberFormatException e)
-            {
-                e.printStackTrace();
-                registrationResult = false;
-                showToast(constants.MESSAGE_APP_SERVER_ERROR);
-            }
+            registrationResult = sendRegistrationToServer(token);
 
             // If registration completed successful
             if (registrationResult)
@@ -86,44 +80,74 @@ public class RegistrationIntentService extends IntentService {
      * Persist registration to app/home server.
      *
      * @param token The device token.
-     * @throws IOException If there was an error connecting/writing to app server
-     * @throws UnknownHostException If there was an error in the ip address of the app server
-     * @throws NumberFormatException If the port was not set correctly in settings
      */
-    private void sendRegistrationToServer(String token) throws IOException, NumberFormatException{
-        String command = "register" + token;
-        String ipField = sharedPreferences.getString("IP", "NOT ENTERED");
-        String portField = sharedPreferences.getString("Port", "NOT ENTERED");
-        String auth_key = sharedPreferences.getString("auth_key", "1234");
-        Socket socket;
-        PrintWriter out;
-        BufferedReader in;
-        socket = new Socket();
-        socket.setSoTimeout(200);
-        socket.connect(new InetSocketAddress(ipField, Integer.parseInt(portField)), 200);
-
-        if(socket != null) // TODO: Find a valid condition to check
+    private boolean sendRegistrationToServer(final String token){
+        class RegistrationClientThread implements Callable<Boolean>
         {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            out.println(auth_key);
-            String verification_status = in.readLine();
-            Log.v("System.out", verification_status);
-            if(verification_status.equals("Verified"))
+            Socket socket = new Socket();
+            PrintWriter out;
+            BufferedReader in;
+
+            @Override
+            public Boolean call()
             {
-                showToast("Connected.");
-                out.println(command);
-                out.close();
-                socket.close();
-            }
-            else
-            {
-                showToast("Authentication key is incorrect");
+                Boolean registrationStatus = false;
+                try
+                {
+                    String command = "register " + token;
+                    String ipField = sharedPreferences.getString("IP", "Not set");
+                    String portField = sharedPreferences.getString("Port", "Not setsadjaiosjods");
+                    String auth_key = sharedPreferences.getString("auth_key", "1234");
+                    socket.connect(new InetSocketAddress(ipField, Integer.parseInt(portField)), 250);
+
+                    if (socket != null)
+                    {
+                        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                        out.println(auth_key);
+                        String verification_status = in.readLine();
+                        if (verification_status.equals("Verified")) {
+                            out.println(command);
+                            registrationStatus = true;
+                        } else {
+                            showToast(constants.MESSAGE_APP_SERVER_ERROR + " (Authentication key is incorrect)");
+                        }
+                    } else {
+                        showToast(constants.MESSAGE_APP_SERVER_ERROR + " (Server information is incorrect)");
+                    }
+                }
+                catch (IOException | NumberFormatException e)
+                {
+                    e.printStackTrace();
+                    showToast(constants.MESSAGE_APP_SERVER_ERROR + " (Server information is incorrect)");
+                }
+                finally
+                {
+                    try{
+                        if (out != null) { out.close(); }
+                        if (in != null) { in.close(); }
+                        if (socket != null) { socket.close(); }
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                        Log.d("System.out", "Error closing in/out streams or socket");
+                    }
+                }
+
+                return registrationStatus;
             }
         }
-        else
-        {
-            showToast("Server information is incorrect.");
+
+        Callable<Boolean> callable = new RegistrationClientThread();
+        Future<Boolean> f = Executors.newSingleThreadExecutor().submit(callable);
+
+        try{
+            return f.get();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
