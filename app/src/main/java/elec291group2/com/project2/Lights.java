@@ -57,6 +57,7 @@ public class Lights extends Fragment
     private String ipField;
     private String portField;
     private String status = "1111111111"; //temp status placeholder
+    private String auth_key;
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -77,6 +78,8 @@ public class Lights extends Fragment
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
+        auth_key = sharedPreferences.getString("auth_key","abc123");
+
         view = inflater.inflate(R.layout.lights, container, false);
 
         masterOnButton = (Button) view.findViewById(R.id.master_on_button);
@@ -232,28 +235,36 @@ public class Lights extends Fragment
     @Override
     public void onPause()
     {
-        sendCommand("exit");
-        try
+        if(socket != null)
+
         {
-            in.close();
-            out.close();
-            socket.close();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            sendCommand("exit");
+            try
+            {
+                handler.removeCallbacksAndMessages(getStatus);
+                in.close();
+                out.close();
+                socket.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         }
-        // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     private void sendCommand(String command)
     {
-        try
+        if(out != null)
         {
-            out.println(command);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            try
+            {
+                out.println(command);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -275,13 +286,12 @@ public class Lights extends Fragment
     {
         try
         {
-            if (in.ready())  // Retrieve command from Android device, add to device queue
-            {
-                status = in.readLine();
-                updateStatusUI();
-                System.out.println("Recieved: " + status);
-            }
-            //textStatus.setText(String.valueOf(i));
+                if (in.ready())  // Retrieve command from Android device, add to device queue
+                {
+                    status = in.readLine();
+                    updateStatusUI();
+                    System.out.println("Recieved: " + status);
+                }
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -298,9 +308,21 @@ public class Lights extends Fragment
             try
             {
                 socket = new Socket(ipField, Integer.parseInt(portField));
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
+                if(socket.isBound()) // TODO: Find a valid condition to check
+                {
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    sendCommand(auth_key);
+                    if(in.readLine().equals("Verified"))
+                    {
+                        System.out.print("Server verified the authentication key.");
+                        Looper.prepare();
+                        handler = new Handler();
+                        handler.postDelayed(getStatus, 1000);
+                        Looper.loop();
+                    }
+                }
             }
             catch (UnknownHostException e1)
             {
@@ -314,10 +336,7 @@ public class Lights extends Fragment
             {
                 e1.printStackTrace();
             }
-            Looper.prepare();
-            handler = new Handler();
-            handler.postDelayed(getStatus, 1000);
-            Looper.loop();
+
         }
     }
 }

@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.Menu;
 
 /**
@@ -59,7 +60,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
 
     private void updatePreference(Preference preference, String key)
     {
-        if (preference == null || key.equals("PIN")) return;
+        if (preference == null || key.equals("PIN") || key.equals("auth_key")) return;
         if (preference instanceof ListPreference)
         {
             ListPreference listPreference = (ListPreference) preference;
@@ -80,6 +81,10 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
             SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
             preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
+            if(!sharedPrefs.getBoolean(key,false))
+                preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_dnd_forwardslash_24dp, null));
+            else
+                preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_error_24dp, null));
         }
     }
 }
