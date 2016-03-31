@@ -232,6 +232,7 @@ public class Overview extends Fragment
                 {
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    Log.v("System.out", auth_key);
                     sendCommand(auth_key);
                     String verification_status = in.readLine();
                     Log.v("System.out", verification_status);
