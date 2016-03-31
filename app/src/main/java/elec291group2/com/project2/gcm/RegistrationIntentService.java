@@ -5,16 +5,15 @@ package elec291group2.com.project2.gcm;
  *
  */
 
-import elec291group2.com.project2.R;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Looper;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
-import elec291group2.com.project2.gcm.constants;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -80,15 +79,50 @@ public class RegistrationIntentService extends IntentService {
         String command = "register" + token;
         String ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         String portField = sharedPreferences.getString("Port", "NOT ENTERED");
+        String auth_key = sharedPreferences.getString("auth_key", "1234");
         Socket socket;
         PrintWriter out;
-        try {
+        BufferedReader in;
+
+        try
+        {
+
             socket = new Socket(ipField, Integer.parseInt(portField));
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            out.println(command);
-            out.close();
-            socket.close();
-        } catch (IOException e1) {
+
+            if(socket != null) // TODO: Find a valid condition to check
+            {
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                out.println(auth_key);
+                String verification_status = in.readLine();
+                Log.v("System.out", verification_status);
+                if(verification_status.equals("Verified"))
+                {
+                    showToast("Connected.");
+                    out.println(command);
+                    out.close();
+                    socket.close();
+                }
+                else
+                {
+                    showToast("Authentication key is incorrect");
+                }
+            }
+            else
+            {
+                showToast("Server information is incorrect.");
+            }
+        }
+        catch (UnknownHostException e1)
+        {
+            e1.printStackTrace();
+        }
+        catch (IOException e1)
+        {
+            e1.printStackTrace();
+        }
+        catch (NumberFormatException e1)
+        {
             e1.printStackTrace();
         }
     }
