@@ -8,11 +8,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -67,7 +69,7 @@ public class Lights extends Fragment
 
             getStatus();
             // Call itself every 500 ms
-            handler.postDelayed(this, 1000);
+
         }
     };
 
@@ -232,6 +234,7 @@ public class Lights extends Fragment
         masterBedroomText.setTextColor(masterBedroomLights == 0 ? Color.RED : Color.GREEN);
     }
 
+
     @Override
     public void onPause()
     {
@@ -241,7 +244,7 @@ public class Lights extends Fragment
             sendCommand("exit");
             try
             {
-                handler.removeCallbacksAndMessages(getStatus);
+
                 in.close();
                 out.close();
                 socket.close();
@@ -281,20 +284,25 @@ public class Lights extends Fragment
         });
     }
 
-
     private void getStatus()
     {
         try
         {
-                if (in.ready())  // Retrieve command from Android device, add to device queue
+            if (in.ready())  // Retrieve command from Android device, add to device queue
+            {
+                status = in.readLine();
+                Log.v("System.out", status);
+                if(status.length() == 10)
                 {
-                    status = in.readLine();
                     updateStatusUI();
-                    System.out.println("Recieved: " + status);
                 }
+
+                handler.postDelayed(getStatus, 1000);
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
+            handler.removeCallbacksAndMessages(getStatus);
         }
 
     }
@@ -307,21 +315,33 @@ public class Lights extends Fragment
         {
             try
             {
+
                 socket = new Socket(ipField, Integer.parseInt(portField));
 
-                if(socket.isBound()) // TODO: Find a valid condition to check
+                if(socket != null) // TODO: Find a valid condition to check
                 {
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                     sendCommand(auth_key);
-                    if(in.readLine().equals("Verified"))
+                    String verification_status = in.readLine();
+                    Log.v("System.out", verification_status);
+                    if(verification_status.equals("Verified"))
                     {
-                        System.out.print("Server verified the authentication key.");
+                        showToast("Connected.");
+
                         Looper.prepare();
                         handler = new Handler();
                         handler.postDelayed(getStatus, 1000);
                         Looper.loop();
                     }
+                    else
+                    {
+                        showToast("Authentication key is incorrect");
+                    }
+                }
+                else
+                {
+                    showToast("Server information is incorrect.");
                 }
             }
             catch (UnknownHostException e1)
@@ -339,4 +359,14 @@ public class Lights extends Fragment
 
         }
     }
+    private void showToast(String message) {
+        final String msg = message;
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }
+

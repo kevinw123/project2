@@ -8,10 +8,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,19 +41,17 @@ public class Overview extends Fragment
     private Socket socket;
     private String ipField;
     private String portField;
+    private String auth_key;
     // status: { systemStatus, doorStatus, motionStatus, laserStatus, alarmStatus
     //           livingRoomLights, kitchenLights, washroomLights, bedroomLights, masterBedroomLights }
-    private String status;
+    private String status = "1111111111";
     private Runnable getStatus = new Runnable()
     {
         @Override
         public void run()
         {
         /* do what you need to do */
-
             getStatus();
-            // Call itself every 500 ms
-            handler.postDelayed(this, 1000);
         }
     };
 
@@ -65,6 +65,7 @@ public class Overview extends Fragment
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
+        auth_key = sharedPreferences.getString(("auth_key"),"1234567");
 
         // security system status
         systemText = (TextView) view.findViewById(R.id.system_status);
@@ -150,31 +151,38 @@ public class Overview extends Fragment
     @Override
     public void onPause()
     {
-        sendCommand("exit");
-        try
+        if(socket != null)
+
         {
-            in.close();
-            out.close();
-            socket.close();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            sendCommand("exit");
+            try
+            {
+
+                in.close();
+                out.close();
+                socket.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         }
-        //Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     private void sendCommand(String command)
     {
-        try
+        if(out != null)
         {
-            out.println(command);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            try
+            {
+                out.println(command);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-
     public void updateStatusUI()
     {
         getActivity().runOnUiThread(new Runnable()
@@ -195,12 +203,18 @@ public class Overview extends Fragment
             if (in.ready())  // Retrieve command from Android device, add to device queue
             {
                 status = in.readLine();
-                updateStatusUI();
-                System.out.println("Recieved: " + status);
+                Log.v("System.out",status);
+                if(status.length() == 10)
+                {
+                    updateStatusUI();
+                }
+
+                handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)
         {
             e.printStackTrace();
+            handler.removeCallbacksAndMessages(getStatus);
         }
 
     }
@@ -213,8 +227,32 @@ public class Overview extends Fragment
             try
             {
                 socket = new Socket(ipField, Integer.parseInt(portField));
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+
+                if(socket != null) // TODO: Find a valid condition to check
+                {
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    sendCommand(auth_key);
+                    String verification_status = in.readLine();
+                    Log.v("System.out", verification_status);
+                    if(verification_status.equals("Verified"))
+                    {
+                        showToast("Connected.");
+
+                        Looper.prepare();
+                        handler = new Handler();
+                        handler.postDelayed(getStatus, 1000);
+                        Looper.loop();
+                    }
+                    else
+                    {
+                        showToast("Authentication key is incorrect");
+                    }
+                }
+                else
+                {
+                    showToast("Server information is incorrect.");
+                }
             }
             catch (UnknownHostException e1)
             {
@@ -228,10 +266,17 @@ public class Overview extends Fragment
             {
                 e1.printStackTrace();
             }
-            Looper.prepare();
-            handler = new Handler();
-            handler.postDelayed(getStatus, 1000);
-            Looper.loop();
         }
+    }
+
+
+    private void showToast(String message) {
+        final String msg = message;
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
