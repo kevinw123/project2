@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -13,6 +14,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
@@ -105,7 +107,16 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
 
     private void updatePreference(Preference preference, String key)
     {
-        if (preference == null || key.equals("PIN") || key.equals("auth_key")) return;
+
+        if(key.equals("auth_key"))
+        {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            String un_hashed = sharedPreferences.getString("auth_key", "1234");
+            //sharedPreferences.edit().putString("auth_key","1234").apply();
+            new hash().execute(un_hashed);
+            return;
+        }
+        if (preference == null || key.equals("PIN")) return;
         if (preference instanceof ListPreference)
         {
             ListPreference listPreference = (ListPreference) preference;
@@ -159,6 +170,18 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         else
         {
             return true;
+        }
+    }
+
+    private class hash extends AsyncTask<String, Void, String>
+    {
+        protected String doInBackground(String... params) {
+            return encrytionFunction.password_hash(params[0].toString());
+        }
+
+        protected void onPostExecute(String result) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            sharedPreferences.edit().putString("auth_key", result).apply();
         }
     }
 }
