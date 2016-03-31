@@ -2,20 +2,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Server Information">
+        android:title="Server Information"
+
+        >
 
         <EditTextPreference
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:key="IP"
             android:summary="Your IP Address"
+            android:icon="@drawable/ic_language_24dp"
             android:title="IP Address"/>
 
         <EditTextPreference
             android:inputType="numberDecimal"
             android:key="Port"
             android:summary="Enter port number 0-65536"
+            android:icon="@drawable/ic_desktop_mac_24dp"
             android:title="Port"/>
+
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="auth_key"
+            android:summary="Enter the key as set on the server."
+            android:title="Authentication Key"
+            android:icon="@drawable/ic_vpn_key_24dp"
+            />
 
     </PreferenceCategory>
 
@@ -25,8 +37,8 @@
         <EditTextPreference
             android:inputType="numberPassword"
             android:key="PIN"
-            android:title="Set your PIN"/>
-
+            android:title="Application PIN"
+            android:icon="@drawable/ic_dialpad_24dp"/>
         <CheckBoxPreference
             android:key="Notifications"
             android:title="Notifications"/>
