@@ -8,11 +8,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -53,6 +55,7 @@ public class Security extends Fragment
     private String ipField;
     private String portField;
     private String status = "1111111111";
+    private String auth_key = "";
     private Runnable getStatus = new Runnable()
     {
         @Override
@@ -73,9 +76,10 @@ public class Security extends Fragment
         view = inflater.inflate(R.layout.security, container, false);
 
         // get the IP and port for socket
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         ipField = sharedPreferences.getString("IP", "Not set");
         portField = sharedPreferences.getString("Port", "Not set");
+        auth_key = sharedPreferences.getString("auth_key", "1234");
 
         // system arming buttons
         masterArmButton = (Button) view.findViewById(R.id.master_arm_button);
@@ -226,28 +230,36 @@ public class Security extends Fragment
     @Override
     public void onPause()
     {
-        sendCommand("exit");
-        try
+        if(socket != null)
+
         {
-            in.close();
-            out.close();
-            socket.close();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            sendCommand("exit");
+            try
+            {
+
+                in.close();
+                out.close();
+                socket.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         }
-        //Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     private void sendCommand(String command)
     {
-        try
+        if(out != null)
         {
-            out.println(command);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            try
+            {
+                out.println(command);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -265,6 +277,7 @@ public class Security extends Fragment
     }
 
 
+
     private void getStatus()
     {
         try
@@ -272,31 +285,59 @@ public class Security extends Fragment
             if (in.ready())  // Retrieve command from Android device, add to device queue
             {
                 status = in.readLine();
-                updateStatusUI();
-                System.out.println("Recieved: " + status);
-            }
+                Log.v("System.out", status);
+                if(status.length() == 10)
+                {
+                    updateStatusUI();
+                }
 
+                handler.postDelayed(getStatus, 1000);
+            }
         } catch (Exception e)
         {
             e.printStackTrace();
+            handler.removeCallbacksAndMessages(getStatus);
         }
 
     }
 
 
+
     class ClientThread implements Runnable
     {
-
         @Override
         public void run()
         {
-
             try
             {
-                socket = new Socket(ipField, Integer.parseInt(portField));
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
+                socket = new Socket(ipField, Integer.parseInt(portField));
+
+                if(socket != null) // TODO: Find a valid condition to check
+                {
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    sendCommand(auth_key);
+                    String verification_status = in.readLine();
+                    Log.v("System.out", verification_status);
+                    if(verification_status.equals("Verified"))
+                    {
+                        showToast("Connected.");
+
+                        Looper.prepare();
+                        handler = new Handler();
+                        handler.postDelayed(getStatus, 1000);
+                        Looper.loop();
+                    }
+                    else
+                    {
+                        showToast("Authentication key is incorrect");
+                    }
+                }
+                else
+                {
+                    showToast("Server information is incorrect.");
+                }
             }
             catch (UnknownHostException e1)
             {
@@ -310,12 +351,17 @@ public class Security extends Fragment
             {
                 e1.printStackTrace();
             }
-            Looper.prepare();
-            handler = new Handler();
-            handler.postDelayed(getStatus, 1000);
-            Looper.loop();
+
         }
     }
-
+    private void showToast(String message) {
+        final String msg = message;
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 }
