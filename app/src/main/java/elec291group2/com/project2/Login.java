@@ -22,6 +22,7 @@ public class Login extends AppCompatActivity
     SharedPreferences sharedPreferences;
     EditText pinField;
     String pin;
+    Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +34,7 @@ public class Login extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Button loginBtn = (Button) findViewById(R.id.login_button);
+        loginBtn = (Button) findViewById(R.id.login_button);
         pinField = (EditText) findViewById(R.id.pin_field);
 
         pin = sharedPreferences.getString("PIN", "Not set");

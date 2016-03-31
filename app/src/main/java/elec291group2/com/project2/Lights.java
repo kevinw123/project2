@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,23 +39,34 @@ public class Lights extends Fragment
     Handler handler;
     SharedPreferences sharedPreferences;
     View view;
+
     Button masterOnButton,
             masterOffButton,
             livingRoomButton,
             kitchenButton,
             washroomButton,
             bedroomButton,
-            masterBedroomButton;
+            masterBedroomButton,
+            livingRoomTimer,
+            kitchenTimer,
+            washroomTimer,
+            bedroomTimer,
+            masterBedroomTimer;
+
     TextView livingText,
             kitchenText,
             washroomText,
             bedroomText,
-            masterBedroomText;
+            masterBedroomText,
+            timerValue;
+
     boolean livingRoomStatus = false,
             kitchenStatus = false,
             washroomStatus = false,
             bedroomStatus = false,
             masterBedroomStatus = false;
+    int duration = 0;
+
     private Socket socket;
     private String ipField;
     private String portField;
@@ -80,7 +92,7 @@ public class Lights extends Fragment
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         ipField = sharedPreferences.getString("IP", "Not set");
         portField = sharedPreferences.getString("Port", "Not set");
-        auth_key = sharedPreferences.getString("auth_key","abc123");
+        auth_key = sharedPreferences.getString("auth_key", "abc123");
 
         view = inflater.inflate(R.layout.lights, container, false);
 
@@ -92,13 +104,20 @@ public class Lights extends Fragment
         bedroomButton = (Button) view.findViewById(R.id.bedroom_button);
         masterBedroomButton = (Button) view.findViewById(R.id.mbedroom_button);
 
+        livingRoomTimer = (Button) view.findViewById(R.id.livingroom_timer);
+        kitchenTimer = (Button) view.findViewById(R.id.kitchen_timer);
+        washroomTimer = (Button) view.findViewById(R.id.washroom_timer);
+        bedroomTimer = (Button) view.findViewById(R.id.bedroom_timer);
+        masterBedroomTimer = (Button) view.findViewById(R.id.mbedroom_timer);
+
         livingText = (TextView) view.findViewById(R.id.livingroom_status);
         kitchenText = (TextView) view.findViewById(R.id.kitchen_status);
         washroomText = (TextView) view.findViewById(R.id.washroom_status);
         bedroomText = (TextView) view.findViewById(R.id.bedroom_status);
         masterBedroomText = (TextView) view.findViewById(R.id.mbedroom_status);
 
-        //updateAllButtons();
+        SeekBar timerSlider = (SeekBar) view.findViewById(R.id.timer_slider);
+        timerValue = (TextView) view.findViewById(R.id.timer_text);
 
         masterOnButton.setOnClickListener(new View.OnClickListener()
         {
@@ -165,44 +184,80 @@ public class Lights extends Fragment
             }
         });
 
+        livingRoomTimer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sendCommand("LivingRoomTimed " + duration);
+            }
+        });
+
+        kitchenTimer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sendCommand("KitchenTimed " + duration);
+            }
+        });
+
+        washroomTimer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sendCommand("WashroomTimed " + duration);
+            }
+        });
+
+        bedroomTimer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sendCommand("BedroomTimed " + duration);
+            }
+        });
+
+        masterBedroomTimer.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sendCommand("MasterBedroomTimed " + duration);
+            }
+        });
+
+
+        timerSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser)
+            {
+                timerValue.setText("Timer: " + String.valueOf(progress * 60 / 100) + " seconds");
+                duration = progress * 60 / 100;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+            }
+        });
+
+
         new Thread(new ClientThread()).start();
 
         updateText();
 
         return view;
     }
-
-    /*
-    public void updateAllButtons()
-    {
-        // update status of the lights
-        livingRoomStatus = Character.getNumericValue(status.charAt(5)) == 1 ? ON : OFF;
-        kitchenStatus = Character.getNumericValue(status.charAt(6)) == 1 ? ON : OFF;
-        washroomStatus = Character.getNumericValue(status.charAt(7)) == 1 ? ON : OFF;
-        bedroomStatus = Character.getNumericValue(status.charAt(8)) == 1 ? ON : OFF;
-        masterBedroomStatus = Character.getNumericValue(status.charAt(9)) == 1 ? ON : OFF;
-
-        // update buttons with new statuses
-        updateButton(livingRoomButton, livingRoomStatus);
-        updateButton(kitchenButton, kitchenStatus);
-        updateButton(washroomButton, washroomStatus);
-        updateButton(bedroomButton, bedroomStatus);
-        updateButton(masterBedroomButton, masterBedroomStatus);
-    }
-
-        public void updateButton(Button btn, boolean status)
-    {
-        btn.setText(status ? "ON" : "OFF");
-        btn.getBackground().setColorFilter(status ? Color.GREEN : Color.RED, PorterDuff.Mode.MULTIPLY);
-    }
-
-    public void masterControl(boolean status)
-    {
-        livingRoomStatus = kitchenStatus = washroomStatus = bedroomStatus = masterBedroomStatus = status;
-        updateAllButtons();
-    }
-
-    */
 
     public void updateText()
     {
@@ -238,7 +293,7 @@ public class Lights extends Fragment
     @Override
     public void onPause()
     {
-        if(socket != null)
+        if (socket != null)
 
         {
             sendCommand("exit");
@@ -259,7 +314,7 @@ public class Lights extends Fragment
 
     private void sendCommand(String command)
     {
-        if(out != null)
+        if (out != null)
         {
             try
             {
@@ -292,7 +347,7 @@ public class Lights extends Fragment
             {
                 status = in.readLine();
                 Log.v("System.out", status);
-                if(status.length() == 10)
+                if (status.length() == 10)
                 {
                     updateStatusUI();
                 }
@@ -307,6 +362,18 @@ public class Lights extends Fragment
 
     }
 
+    private void showToast(String message)
+    {
+        final String msg = message;
+        new Handler(Looper.getMainLooper()).post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     class ClientThread implements Runnable
     {
@@ -318,14 +385,14 @@ public class Lights extends Fragment
 
                 socket = new Socket(ipField, Integer.parseInt(portField));
 
-                if(socket != null) // TODO: Find a valid condition to check
+                if (socket != null) // TODO: Find a valid condition to check
                 {
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                     sendCommand(auth_key);
                     String verification_status = in.readLine();
                     Log.v("System.out", verification_status);
-                    if(verification_status.equals("Verified"))
+                    if (verification_status.equals("Verified"))
                     {
                         showToast("Connected.");
 
@@ -343,30 +410,19 @@ public class Lights extends Fragment
                 {
                     showToast("Server information is incorrect.");
                 }
-            }
-            catch (UnknownHostException e1)
+            } catch (UnknownHostException e1)
             {
                 e1.printStackTrace();
-            }
-            catch (IOException e1)
+            } catch (IOException e1)
             {
                 e1.printStackTrace();
-            }
-            catch (NumberFormatException e1)
+            } catch (NumberFormatException e1)
             {
                 e1.printStackTrace();
             }
 
         }
-    }
-    private void showToast(String message) {
-        final String msg = message;
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-            }
-        });
+
     }
 }
 
