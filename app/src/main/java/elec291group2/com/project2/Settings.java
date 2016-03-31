@@ -1,5 +1,6 @@
 package elec291group2.com.project2;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -124,10 +125,12 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
             SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
             preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
-            if(!sharedPrefs.getBoolean(key,false))
-                preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_dnd_forwardslash_24dp, null));
-            else
-                preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_error_24dp, null));
+            if (isAdded()){
+                if(!sharedPrefs.getBoolean(key,false))
+                    preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_dnd_forwardslash_24dp, null));
+                else
+                    preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_error_24dp, null));
+            }
         }
     }
 
