@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,9 +46,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        sharedPreferences = getApplicationContext().getSharedPreferences(
-                             "serverData", Context.MODE_PRIVATE);
-
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         try
         {
             // Get device token from GCM server
@@ -95,11 +94,10 @@ public class RegistrationIntentService extends IntentService {
                 Boolean registrationStatus = false;
                 try
                 {
-                    String command = "register" + token;
+                    String command = "register " + token;
                     String ipField = sharedPreferences.getString("IP", "Not set");
-                    String portField = sharedPreferences.getString("Port", "Not set");
+                    String portField = sharedPreferences.getString("Port", "Not setsadjaiosjods");
                     String auth_key = sharedPreferences.getString("auth_key", "1234");
-                    socket.setSoTimeout(250);
                     socket.connect(new InetSocketAddress(ipField, Integer.parseInt(portField)), 250);
 
                     if (socket != null)
@@ -118,10 +116,10 @@ public class RegistrationIntentService extends IntentService {
                         showToast(constants.MESSAGE_APP_SERVER_ERROR + " (Server information is incorrect)");
                     }
                 }
-                catch (IOException e)
+                catch (IOException | NumberFormatException e)
                 {
                     e.printStackTrace();
-
+                    showToast(constants.MESSAGE_APP_SERVER_ERROR + " (Server information is incorrect)");
                 }
                 finally
                 {
@@ -143,8 +141,9 @@ public class RegistrationIntentService extends IntentService {
 
         Callable<Boolean> callable = new RegistrationClientThread();
         Future<Boolean> f = Executors.newSingleThreadExecutor().submit(callable);
+
         try{
-            return f.get().booleanValue();
+            return f.get();
         }
         catch (Exception e) {
             e.printStackTrace();
