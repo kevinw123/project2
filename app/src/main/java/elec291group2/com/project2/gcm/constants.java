@@ -23,4 +23,7 @@ public class constants {
 
     public static final String MESSAGE_REGISTRATION_SUCCESS =
             "Successfully registered to push notification server: ";
+
+    public static final String MESSAGE_PLAY_SERVICES_ERROR =
+        "Failed to activate notifications due to Google Play Services error: ";
 }

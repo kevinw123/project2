@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
+import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -20,7 +21,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.NumberFormat;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -87,7 +90,10 @@ public class RegistrationIntentService extends IntentService {
         String command = "register" + token;
         String ipField = sharedPreferences.getString("IP", "Not set");
         String portField = sharedPreferences.getString("Port", "Not set");
-        Socket socket = new Socket(ipField, Integer.parseInt(portField));
+        //Socket socket = new Socket(ipField, Integer.parseInt(portField));
+        Socket socket = new Socket();
+        socket.setSoTimeout(200);
+        socket.connect(new InetSocketAddress(ipField, Integer.parseInt(portField)), 200);
         PrintWriter out =
                 new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 

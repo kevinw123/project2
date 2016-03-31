@@ -16,6 +16,7 @@ import android.preference.PreferenceGroup;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -124,7 +125,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
             checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
             SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-            preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
+            //preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
             if (isAdded()){
                 if(!sharedPrefs.getBoolean(key,false))
                     preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_dnd_forwardslash_24dp, null));
@@ -145,7 +146,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         if (resultCode != ConnectionResult.SUCCESS)
         {
             // If failed, display error dialogs
-            String errorString = "Failed to activate notifications due to Google Play Services error: " +
+            String errorString = constants.MESSAGE_PLAY_SERVICES_ERROR +
                     apiAvailability.getErrorString(resultCode);
             Toast.makeText(getActivity(), errorString, Toast.LENGTH_SHORT).show();
             if (apiAvailability.isUserResolvableError(resultCode))
