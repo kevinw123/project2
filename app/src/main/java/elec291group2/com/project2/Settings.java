@@ -71,7 +71,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", ""));
         menu.findItem(R.id.port).setTitle("Port: " + sharedPreferences.getString("Port", ""));
-        menu.findItem(R.id.auth_key).setTitle("Authentication Key: " + sharedPreferences.getString("Authentication Key", ""));
+        //menu.findItem(R.id.auth_key).setTitle("Authentication Key: " + sharedPreferences.getString("Authentication Key", ""));
 
         // Register with GCM and app server if Notifications switches to 'enabled'
         if ( key.equals("Notifications")
@@ -171,11 +171,11 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         }
     }
 
+
     private class hash extends AsyncTask<String, Void, String>
     {
-
         protected String doInBackground(String... params){
-            return EncryptionFunction.password_hash(params[0].toString());
+            return "";//EncryptionFunction.password_hash(params[0].toString());
         }
 
         protected void onPostExecute(String result) {
@@ -183,4 +183,5 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             sharedPreferences.edit().putString("auth_key", result).apply();
         }
     }
+
 }

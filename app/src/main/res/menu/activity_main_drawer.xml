@@ -37,14 +37,11 @@
             android:id="@+id/port"
             android:title="Port"/>
         <item
-            android:id="@+id/auth_key"
-            android:title="Authentication Key"/>
-        <item
             android:id="@+id/notifications"
             android:title="Notifications"/>
         <item
             android:id="@+id/status"
-            android:title="System Status: "/>
+            android:title="System Status"/>
     </group>
 
 </menu>

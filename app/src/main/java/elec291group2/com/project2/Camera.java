@@ -1,21 +1,40 @@
 package elec291group2.com.project2;
 
-import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-/**
- * Created by Kevin on 2016-03-23.
- */
-public class Camera extends Fragment
+public class Camera extends AppCompatActivity
 {
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    protected void onCreate(Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.camera, container, false);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.camera);
+        getSupportActionBar().setTitle("Camera");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 }

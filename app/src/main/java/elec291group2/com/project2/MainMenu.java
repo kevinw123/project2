@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -44,9 +45,11 @@ public class MainMenu extends AppCompatActivity
 
         String ip = sharedPreferences.getString("IP", "Not set");
         String port = sharedPreferences.getString("Port", "Not set");
+        boolean notifStatus = sharedPreferences.getBoolean("Notifications", false);
 
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + ip);
         menu.findItem(R.id.port).setTitle("Port: " + port);
+        menu.findItem(R.id.notifications).setTitle("Notifications: " + (notifStatus ? "On" : "Off"));
 
         if (ip.equals("Not set") || port.equals("Not set"))
         {
@@ -100,8 +103,9 @@ public class MainMenu extends AppCompatActivity
                 fragment = new Security();
                 break;
             case R.id.nav_camera:
-                toolbar.setTitle("Camera");
-                fragment = new Camera();
+                Intent camera = new Intent(getApplicationContext(), Camera.class);
+                startActivity(camera);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 break;
             case R.id.nav_lights:
                 toolbar.setTitle("Lights");
