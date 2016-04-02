@@ -21,12 +21,19 @@
 
     </android.support.design.widget.AppBarLayout-->
 
-    <RelativeLayout
+
+        <io.vov.vitamio.widget.VideoView
+            android:id="@+id/surface_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    <!--RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".Camera">
-    </RelativeLayout>
+    </RelativeLayout-->
 
 </android.support.design.widget.CoordinatorLayout>
