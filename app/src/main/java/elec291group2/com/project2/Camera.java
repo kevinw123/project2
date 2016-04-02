@@ -17,7 +17,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 
-public class Camera extends Activity
+public class Camera extends AppCompatActivity
 {
     private static final String TAG = "Camera";
     private String path;
@@ -33,9 +33,9 @@ public class Camera extends Activity
             return;
 
         setContentView(R.layout.camera);
-        //getSupportActionBar().setTitle("Camera");
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Camera");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         mVideoView = (VideoView) findViewById(R.id.surface_view);
         path = "rtmp://192.168.1.71:1935/live/myStream";
 
@@ -55,7 +55,7 @@ public class Camera extends Activity
     }
 
 
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId())
         {
@@ -72,5 +72,5 @@ public class Camera extends Activity
     {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
-    }*/
+    }
 }
