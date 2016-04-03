@@ -143,7 +143,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("0" + (livingRoomStatus ? "0" : "1"));
+                sendCommand("2" + (livingRoomStatus ? "0" : "1"));
 
             }
         });
@@ -153,7 +153,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("1" + (kitchenStatus ? "0" : "1"));
+                sendCommand("3" + (kitchenStatus ? "0" : "1"));
             }
         });
 
@@ -162,7 +162,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("2" + (washroomStatus ? "0" : "1"));
+                sendCommand("0" + (washroomStatus ? "0" : "1"));
             }
         });
 
@@ -171,7 +171,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("3" + (bedroomStatus ? "0" : "1"));
+                sendCommand("1" + (bedroomStatus ? "0" : "1"));
             }
         });
 
@@ -257,10 +257,10 @@ public class Lights extends Fragment
 
     public void updateText()
     {
-        int livingRoomLights = Character.getNumericValue(status.charAt(5)),
-                kitchenLights = Character.getNumericValue(status.charAt(6)),
-                washroomLights = Character.getNumericValue(status.charAt(7)),
-                bedroomLights = Character.getNumericValue(status.charAt(8)),
+        int livingRoomLights = Character.getNumericValue(status.charAt(7)),
+                kitchenLights = Character.getNumericValue(status.charAt(8)),
+                washroomLights = Character.getNumericValue(status.charAt(5)),
+                bedroomLights = Character.getNumericValue(status.charAt(6)),
                 masterBedroomLights = Character.getNumericValue(status.charAt(9));
 
         // 0 = on (R), 1 = off (G)
@@ -339,15 +339,16 @@ public class Lights extends Fragment
     {
         try
         {
-            String status = in.readLine();
-            if (status != null)  // Retrieve command from Android device, add to device queue
+            String temp_status = in.readLine();
+            if (temp_status != null)  // Retrieve command from Android device, add to device queue
             {
-                Log.v("System.out", status);
-                if (status.length() == 10)
+                Log.v("Status", status);
+                if (temp_status.length() == 10)
                 {
+                    status = temp_status;
                     updateStatusUI();
                 }
-                handler.postDelayed(getStatus, 1000);
+                handler.postDelayed(getStatus, 100);
             }
         } catch (Exception e)
         {

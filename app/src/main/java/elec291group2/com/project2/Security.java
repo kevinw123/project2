@@ -281,11 +281,12 @@ public class Security extends Fragment
     {
         try
         {
-            String status = in.readLine();
-            if (status != null)  // Retrieve command from Android device, add to device queue
+            String temp_status = in.readLine();
+            if (temp_status != null)  // Retrieve command from Android device, add to device queue
             {
-                if (status.length() == 10)
+                if (temp_status.length() == 10)
                 {
+                    status = temp_status;
                     updateStatusUI();
                 }
                 handler.postDelayed(getStatus, 1000);

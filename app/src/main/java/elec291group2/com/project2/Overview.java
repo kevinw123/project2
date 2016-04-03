@@ -1,7 +1,6 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -135,10 +134,10 @@ public class Overview extends Fragment
      */
     public void updateLights()
     {
-        int livingRoomLights = Character.getNumericValue(status.charAt(5)),
-                kitchenLights = Character.getNumericValue(status.charAt(6)),
-                washroomLights = Character.getNumericValue(status.charAt(7)),
-                bedroomLights = Character.getNumericValue(status.charAt(8)),
+        int livingRoomLights = Character.getNumericValue(status.charAt(7)),
+                kitchenLights = Character.getNumericValue(status.charAt(8)),
+                washroomLights = Character.getNumericValue(status.charAt(5)),
+                bedroomLights = Character.getNumericValue(status.charAt(6)),
                 masterBedroomLights = Character.getNumericValue(status.charAt(9));
 
         // 0 = on (R), 1 = off (G)
@@ -200,11 +199,12 @@ public class Overview extends Fragment
     {
         try
         {
-            String status = in.readLine();
-            if (status != null)  // Retrieve command from Android device, add to device queue
+            String temp_status = in.readLine();
+            if (temp_status != null)  // Retrieve command from Android device, add to device queue
             {
-                if (status.length() == 10)
+                if (temp_status.length() == 10)
                     {
+                        status = temp_status;
                         updateStatusUI();
                     }
                 handler.postDelayed(getStatus, 1000);
