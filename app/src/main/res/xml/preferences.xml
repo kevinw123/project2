@@ -46,7 +46,8 @@
             android:icon="@drawable/ic_dialpad_24dp"/>
         <CheckBoxPreference
             android:key="Notifications"
-            android:title="Notifications"
+            android:title="Push notifications"
+            android:summary="Must be connected to server to enable"
             />
 
     </PreferenceCategory>

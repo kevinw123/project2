@@ -2,6 +2,11 @@
 <manifest package="elec291group2.com.project2"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <activity android:name="io.vov.vitamio.activity.InitActivity"
+        android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden"
+        android:launchMode="singleTop"
+        android:theme="@android:style/Theme.NoTitleBar"
+        android:windowSoftInputMode="stateAlwaysHidden"/>
     <!-- Google Cloud Messaging permissions -->
     <permission
         android:name="elec291group2.com.project2.permission.C2D_MESSAGE"
@@ -12,6 +17,9 @@
 
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -70,6 +78,8 @@
             android:exported="false">
         </service>
 
+        <activity android:name=".Camera">
+        </activity>
     </application>
 
 </manifest>

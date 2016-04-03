@@ -1,6 +1,5 @@
 package elec291group2.com.project2;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -73,7 +71,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", ""));
         menu.findItem(R.id.port).setTitle("Port: " + sharedPreferences.getString("Port", ""));
-        menu.findItem(R.id.auth_key).setTitle("Authentication Key: " + sharedPreferences.getString("Authentication Key", ""));
+        //menu.findItem(R.id.auth_key).setTitle("Authentication Key: " + sharedPreferences.getString("Authentication Key", ""));
 
         // Register with GCM and app server if Notifications switches to 'enabled'
         if ( key.equals("Notifications")
@@ -110,7 +108,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
 
         if(key.equals("auth_key"))
         {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
             String un_hashed = sharedPreferences.getString("auth_key", "1234");
             //sharedPreferences.edit().putString("auth_key","1234").apply();
             new hash().execute(un_hashed);
@@ -134,7 +132,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         else if (preference instanceof CheckBoxPreference)
         {
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
-            checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
+            //checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
             SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
             //preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
             if (isAdded()){
@@ -173,10 +171,11 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         }
     }
 
+
     private class hash extends AsyncTask<String, Void, String>
     {
-        protected String doInBackground(String... params) {
-            return encrytionFunction.password_hash(params[0].toString());
+        protected String doInBackground(String... params){
+            return "";//EncryptionFunction.password_hash(params[0].toString());
         }
 
         protected void onPostExecute(String result) {
@@ -184,4 +183,5 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             sharedPreferences.edit().putString("auth_key", result).apply();
         }
     }
+
 }

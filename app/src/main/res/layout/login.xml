@@ -33,32 +33,31 @@
         tools:showIn="@layout/login">
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Enter PIN"
-            android:id="@+id/textView2"
             android:layout_above="@+id/pin_field"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:text="Enter PIN"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <EditText
+            android:id="@+id/pin_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="numberPassword"
-            android:ems="4"
-            android:gravity="center"
-            android:id="@+id/pin_field"
             android:layout_above="@+id/login_button"
             android:layout_centerHorizontal="true"
-/>
+            android:ems="4"
+            android:gravity="center"
+            android:inputType="numberPassword"/>
 
         <Button
+            android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:id="@+id/login_button"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
+            android:text="Login"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
