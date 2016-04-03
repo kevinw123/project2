@@ -1,7 +1,6 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -100,7 +99,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("System ON");
+                sendCommand("1");
             }
         });
 
@@ -109,7 +108,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("System OFF");
+                sendCommand("0");
             }
         });
 

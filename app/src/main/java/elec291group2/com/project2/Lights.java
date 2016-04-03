@@ -1,7 +1,6 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -207,9 +206,6 @@ public class Lights extends Fragment
                 sendCommand("WashroomTimed " + duration);
             }
         });
-        
-        return view;
-    }
 
         bedroomTimer.setOnClickListener(new View.OnClickListener()
         {
