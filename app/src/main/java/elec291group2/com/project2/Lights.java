@@ -124,7 +124,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("MasterLights ON");
+                sendCommand("51");
             }
         });
 
@@ -133,7 +133,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("MasterLights OFF");
+                sendCommand("50");
 
             }
         });
@@ -143,7 +143,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Living " + (livingRoomStatus ? "OFF" : "ON"));
+                sendCommand("0" + (livingRoomStatus ? "0" : "1"));
 
             }
         });
@@ -153,7 +153,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Kitchen " + (kitchenStatus ? "OFF" : "ON"));
+                sendCommand("1" + (kitchenStatus ? "0" : "1"));
             }
         });
 
@@ -162,7 +162,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Washroom " + (washroomStatus ? "OFF" : "ON"));
+                sendCommand("2" + (washroomStatus ? "0" : "1"));
             }
         });
 
@@ -171,7 +171,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Bedroom " + (bedroomStatus ? "OFF" : "ON"));
+                sendCommand("3" + (bedroomStatus ? "0" : "1"));
             }
         });
 
@@ -180,7 +180,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("MasterBedroom " + (masterBedroomStatus ? "OFF" : "ON"));
+                sendCommand("4" + (masterBedroomStatus ? "0" : "1"));
             }
         });
 
