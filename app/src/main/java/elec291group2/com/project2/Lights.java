@@ -1,6 +1,7 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -77,7 +78,7 @@ public class Lights extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
         auth_key = sharedPreferences.getString("auth_key","abc123");
@@ -167,7 +168,7 @@ public class Lights extends Fragment
 
         new Thread(new ClientThread()).start();
 
-        updateText();
+
 
         return view;
     }
@@ -288,15 +289,13 @@ public class Lights extends Fragment
     {
         try
         {
-            if (in.ready())  // Retrieve command from Android device, add to device queue
+            String status = in.readLine();
+            if (status != null)  // Retrieve command from Android device, add to device queue
             {
-                status = in.readLine();
-                Log.v("System.out", status);
-                if(status.length() == 10)
+                if (status.length() == 10)
                 {
                     updateStatusUI();
                 }
-
                 handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)

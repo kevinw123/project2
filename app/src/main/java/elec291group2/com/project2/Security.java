@@ -1,6 +1,7 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -64,8 +65,7 @@ public class Security extends Fragment
       /* do what you need to do */
 
             getStatus();
-            // Call itself every 500 ms
-            handler.postDelayed(this, 500);
+
         }
     };
 
@@ -76,7 +76,7 @@ public class Security extends Fragment
         view = inflater.inflate(R.layout.security, container, false);
 
         // get the IP and port for socket
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         ipField = sharedPreferences.getString("IP", "NOT ENTERED");
         portField = sharedPreferences.getString("Port", "NOT ENTERED");
         auth_key = sharedPreferences.getString("auth_key", "1234");
@@ -152,7 +152,7 @@ public class Security extends Fragment
         new Thread(new ClientThread()).start();
 
         //updateAllButtons();
-        updateText();
+        //updateText();
 
         return view;
     }
@@ -282,15 +282,13 @@ public class Security extends Fragment
     {
         try
         {
-            if (in.ready())  // Retrieve command from Android device, add to device queue
+            String status = in.readLine();
+            if (status != null)  // Retrieve command from Android device, add to device queue
             {
-                status = in.readLine();
-                Log.v("System.out", status);
-                if(status.length() == 10)
+                if (status.length() == 10)
                 {
                     updateStatusUI();
                 }
-
                 handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)

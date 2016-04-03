@@ -12,7 +12,9 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 /**
  * Created by Kevin Qiu on 2016-03-29.
@@ -65,7 +67,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
 
         if(key.equals("auth_key"))
         {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             String un_hashed = sharedPreferences.getString("auth_key", "1234");
             //sharedPreferences.edit().putString("auth_key","1234").apply();
             new hash().execute(un_hashed);
@@ -102,10 +104,13 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
     private class hash extends AsyncTask<String, Void, String>
     {
         protected String doInBackground(String... params) {
+            Log.v("UN_HASHED", params[0]);
             return encrytionFunction.password_hash(params[0].toString());
         }
 
         protected void onPostExecute(String result) {
+            //Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+            Log.v("HASHED", result);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             sharedPreferences.edit().putString("auth_key", result).apply();
         }
