@@ -1,6 +1,7 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -62,9 +63,9 @@ public class Overview extends Fragment
         view = inflater.inflate(R.layout.overview, container, false);
 
         // get the IP and port for socket
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        ipField = sharedPreferences.getString("IP", "Not set");
-        portField = sharedPreferences.getString("Port", "Not set");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        ipField = sharedPreferences.getString("IP", "NOT ENTERED");
+        portField = sharedPreferences.getString("Port", "NOT ENTERED");
         auth_key = sharedPreferences.getString(("auth_key"),"1234567");
 
         // security system status
@@ -157,7 +158,6 @@ public class Overview extends Fragment
             sendCommand("exit");
             try
             {
-
                 in.close();
                 out.close();
                 socket.close();
@@ -200,15 +200,13 @@ public class Overview extends Fragment
     {
         try
         {
-            if (in.ready())  // Retrieve command from Android device, add to device queue
+            String status = in.readLine();
+            if (status != null)  // Retrieve command from Android device, add to device queue
             {
-                status = in.readLine();
-                Log.v("System.out",status);
-                if(status.length() == 10)
-                {
-                    updateStatusUI();
-                }
-
+                if (status.length() == 10)
+                    {
+                        updateStatusUI();
+                    }
                 handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)
@@ -276,7 +274,7 @@ public class Overview extends Fragment
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
             }
         });
     }
