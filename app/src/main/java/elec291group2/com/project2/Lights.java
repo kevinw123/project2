@@ -1,6 +1,7 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -184,24 +185,20 @@ public class Lights extends Fragment
             }
         });
 
-        livingRoomTimer.setOnClickListener(new View.OnClickListener()
-        {
+        livingRoomTimer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 sendCommand("LivingRoomTimed " + duration);
             }
         });
 
-        kitchenTimer.setOnClickListener(new View.OnClickListener()
-        {
+        kitchenTimer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 sendCommand("KitchenTimed " + duration);
             }
         });
-
+        
         washroomTimer.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -210,6 +207,9 @@ public class Lights extends Fragment
                 sendCommand("WashroomTimed " + duration);
             }
         });
+        
+        return view;
+    }
 
         bedroomTimer.setOnClickListener(new View.OnClickListener()
         {
@@ -343,15 +343,14 @@ public class Lights extends Fragment
     {
         try
         {
-            if (in.ready())  // Retrieve command from Android device, add to device queue
+            String status = in.readLine();
+            if (status != null)  // Retrieve command from Android device, add to device queue
             {
-                status = in.readLine();
                 Log.v("System.out", status);
                 if (status.length() == 10)
                 {
                     updateStatusUI();
                 }
-
                 handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)

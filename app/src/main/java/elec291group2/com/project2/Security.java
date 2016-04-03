@@ -76,9 +76,9 @@ public class Security extends Fragment
         view = inflater.inflate(R.layout.security, container, false);
 
         // get the IP and port for socket
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        ipField = sharedPreferences.getString("IP", "NOT ENTERED");
-        portField = sharedPreferences.getString("Port", "NOT ENTERED");
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        ipField = sharedPreferences.getString("IP", "Not set");
+        portField = sharedPreferences.getString("Port", "Not set");
         auth_key = sharedPreferences.getString("auth_key", "1234");
 
         // system arming buttons
