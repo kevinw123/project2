@@ -1,8 +1,8 @@
 package elec291group2.com.project2.gcm;
 
 /**
- * Created by Derek on 3/25/2016.
- *
+ * Base service class for communicating with Google Cloud Messaging.
+ * Receives and displays notifications when requested by app server.
  */
 import elec291group2.com.project2.R;
 import android.app.NotificationManager;
@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -35,14 +36,12 @@ public class MyGcmListenerService extends GcmListenerService {
         // Get string from 'message' field
         String message = data.getString("message");
 
-        // Send notification if enabled in shared preferences.
-        sharedPreferences = getApplicationContext().getSharedPreferences(
-                "serverData", Context.MODE_PRIVATE);
+        // Send notification only if enabled in shared preferences.
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if (sharedPreferences.getBoolean("Notifications", false))
         {
             sendNotification(message);
         }
-
     }
 
     /**

@@ -1,8 +1,7 @@
 package elec291group2.com.project2.gcm;
 
 /**
- * Created by Derek on 3/25/2016.
- * Service started by system automatically to handle token refreshes.
+ * Service started by system to handle token refreshes when necessary
  */
 
 import android.content.Intent;

@@ -1,18 +1,22 @@
 package elec291group2.com.project2.gcm;
 
 /**
- * Created by Derek on 3/26/2016.
+ *  Class for GCM-related constants.
  *
  */
 public class constants {
     // Used for error dialog message on play services check.
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    public static final String BROADCAST_REGISTRATION_COMPLETE =
-            "broadcast-registration-complete";
-
+    // Sender ID used to connect from device to GCM
     public static final String GCM_SENDER_ID =
             "107441647513";
+
+    /*
+     * Push notification registration output dialogs
+     */
+    public static final String BROADCAST_REGISTRATION_COMPLETE =
+            "broadcast-registration-complete";
 
     public static final String MESSAGE_GCM_SERVER_ERROR =
             "Failed to connect to Google Cloud Messaging server";

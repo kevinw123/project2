@@ -1,7 +1,7 @@
 package elec291group2.com.project2.gcm;
 
 /**
- * Created by Derek on 3/25/2016.
+ * Intent service class used to register device with Google Cloud Messaging
  *
  */
 
@@ -54,6 +54,7 @@ public class RegistrationIntentService extends IntentService {
             String token = instanceID.getToken(constants.GCM_SENDER_ID,
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
+            // Attempt to register device and update registrationResult
             registrationResult = sendRegistrationToServer(token);
 
             // If registration completed successful
@@ -94,12 +95,14 @@ public class RegistrationIntentService extends IntentService {
                 Boolean registrationStatus = false;
                 try
                 {
+                    // Get server information and create socket
                     String command = "register " + token;
                     String ipField = sharedPreferences.getString("IP", "Not set");
-                    String portField = sharedPreferences.getString("Port", "Not setsadjaiosjods");
+                    String portField = sharedPreferences.getString("Port", "Not set");
                     String auth_key = sharedPreferences.getString("auth_key", "1234");
                     socket.connect(new InetSocketAddress(ipField, Integer.parseInt(portField)), 250);
 
+                    // Authenticate with server and send register command
                     if (socket != null)
                     {
                         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -123,6 +126,7 @@ public class RegistrationIntentService extends IntentService {
                 }
                 finally
                 {
+                    // Close input/output streams and socket
                     try{
                         if (out != null) { out.close(); }
                         if (in != null) { in.close(); }
@@ -139,9 +143,11 @@ public class RegistrationIntentService extends IntentService {
             }
         }
 
+        // Execute callable and store return value
         Callable<Boolean> callable = new RegistrationClientThread();
         Future<Boolean> f = Executors.newSingleThreadExecutor().submit(callable);
 
+        // Return whether or not the registration was successful
         try{
             return f.get();
         }
