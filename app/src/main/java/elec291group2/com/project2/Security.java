@@ -1,6 +1,7 @@
 package elec291group2.com.project2;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -64,8 +65,7 @@ public class Security extends Fragment
       /* do what you need to do */
 
             getStatus();
-            // Call itself every 500 ms
-            handler.postDelayed(this, 500);
+
         }
     };
 
@@ -152,7 +152,7 @@ public class Security extends Fragment
         new Thread(new ClientThread()).start();
 
         //updateAllButtons();
-        updateText();
+        //updateText();
 
         return view;
     }
@@ -282,15 +282,13 @@ public class Security extends Fragment
     {
         try
         {
-            if (in.ready())  // Retrieve command from Android device, add to device queue
+            String status = in.readLine();
+            if (status != null)  // Retrieve command from Android device, add to device queue
             {
-                status = in.readLine();
-                Log.v("System.out", status);
-                if(status.length() == 10)
+                if (status.length() == 10)
                 {
                     updateStatusUI();
                 }
-
                 handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)
@@ -359,7 +357,7 @@ public class Security extends Fragment
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
             }
         });
     }
