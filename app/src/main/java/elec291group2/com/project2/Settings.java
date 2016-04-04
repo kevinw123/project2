@@ -32,7 +32,7 @@ import elec291group2.com.project2.gcm.constants;
  */
 public class Settings extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
 {
-
+    String last_hash = "";
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -44,6 +44,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
     @Override
     public void onResume()
     {
+
         super.onResume();
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); ++i)
         {
@@ -68,6 +69,12 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key)
     {
         updatePreference(findPreference(key), key);
+        String un_hashed = sharedPreferences.getString("auth_key", "1234");
+        if(key.equals("auth_key") && !un_hashed.equals(last_hash))
+        {
+            //sharedPreferences.edit().putString("auth_key","1234").apply();
+            new hash().execute(un_hashed);
+        }
 
         Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", ""));
@@ -107,15 +114,8 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
     private void updatePreference(Preference preference, String key)
     {
 
-        if(key.equals("auth_key"))
-        {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String un_hashed = sharedPreferences.getString("auth_key", "1234");
-            //sharedPreferences.edit().putString("auth_key","1234").apply();
-            new hash().execute(un_hashed);
-            return;
-        }
-        if (preference == null || key.equals("PIN")) return;
+
+        if (preference == null || key.equals("PIN") || key.equals("auth_key")) return;
         if (preference instanceof ListPreference)
         {
             ListPreference listPreference = (ListPreference) preference;
@@ -183,6 +183,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         protected void onPostExecute(String result) {
             //Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             Log.v("HASHED", result);
+            last_hash = result;
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             sharedPreferences.edit().putString("auth_key", result).apply();
         }

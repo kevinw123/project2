@@ -4,7 +4,8 @@ package elec291group2.com.project2.gcm;
  * Base service class for communicating with Google Cloud Messaging.
  * Receives and displays notifications when requested by app server.
  */
-import elec291group2.com.project2.R;
+
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,11 +15,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
 import elec291group2.com.project2.MainMenu;
+import elec291group2.com.project2.R;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -56,13 +57,17 @@ public class MyGcmListenerService extends GcmListenerService {
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.appicon)
-                .setContentTitle("SmartHomeServer")
+        Notification.Builder notificationBuilder = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_home_24dp)
+                .setContentTitle("Home")
                 .setContentText(message)
+                .setLights(0xFFFF2506, 150, 150)
+                .setColor(0xFFFF2506)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setStyle(new Notification.BigTextStyle().bigText(message))
                 .setContentIntent(pendingIntent);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

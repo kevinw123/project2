@@ -11,7 +11,7 @@ public class EncryptionFunction
                     "kE", "v%", "cy", "dz", "lc", "HU", "H|", "8)", "Po", "8-",
                     "TR", "1I", "3a", "4a", "09a", "HsA"};
 
-    static String message_id = "elec291project2";
+    static String message_id = "USOGs0rG3CABhXG";
 
     //for password login
     //length of the password has to be greater or equal to 6
@@ -45,15 +45,13 @@ public class EncryptionFunction
     //messages have to share the same length
     static public String encrypt_message(String message){
         int message_length = message.length();
-        StringBuffer to_return = new StringBuffer();
-        to_return.append(message_id);
-        to_return.append(message);
-        return to_return.toString();
+        String to_return = message_id+message;
+        return to_return;
     }
 
     static public String decrypt_message(String message){
         int message_length = message.length();
-        String useful_info = message.replace("elec291project2", "");
+        String useful_info = message.replace(message_id, "");
         return useful_info;
     }
 
@@ -65,4 +63,9 @@ public class EncryptionFunction
         to_swap[p2] = temp;
         return  new String(to_swap);
     }
+
+    static public boolean check_messageID(String message){
+        return message.contains(message_id);
+    }
+
 }

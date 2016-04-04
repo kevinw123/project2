@@ -65,7 +65,7 @@ public class Lights extends Fragment
             washroomStatus = false,
             bedroomStatus = false,
             masterBedroomStatus = false;
-    int duration = 0;
+    byte duration = 0;
 
     private Socket socket;
     private String ipField;
@@ -188,7 +188,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("8 " + duration);
+                sendCommand("8" + (char) duration);
             }
         });
 
@@ -197,7 +197,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("9 " + duration);
+                sendCommand("9" + (char) duration);
             }
         });
 
@@ -206,7 +206,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("6 " + duration);
+                sendCommand("6" + (char) duration);
             }
         });
 
@@ -215,7 +215,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("7 " + duration);
+                sendCommand("7" + (char) duration);
             }
         });
 
@@ -224,7 +224,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("10 " + duration);
+                sendCommand(":" + (char) duration);
             }
         });
 
@@ -235,8 +235,8 @@ public class Lights extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser)
             {
-                timerValue.setText("Timer: " + String.valueOf(progress * 20 / 100) + " seconds");
-                duration = progress * 20 / 100;
+                timerValue.setText("Timer: " + String.valueOf(progress * 60 / 100) + " seconds");
+                duration = (byte) ( (progress * 60 / 100) & 0xff ) ;
             }
 
             @Override

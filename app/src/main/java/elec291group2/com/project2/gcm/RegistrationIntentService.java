@@ -6,7 +6,6 @@ package elec291group2.com.project2.gcm;
  */
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -15,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -26,10 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.NumberFormat;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -96,7 +93,7 @@ public class RegistrationIntentService extends IntentService {
                 try
                 {
                     // Get server information and create socket
-                    String command = "register " + token;
+                    String command = "register" + token;
                     String ipField = sharedPreferences.getString("IP", "Not set");
                     String portField = sharedPreferences.getString("Port", "Not set");
                     String auth_key = sharedPreferences.getString("auth_key", "1234");
@@ -111,7 +108,10 @@ public class RegistrationIntentService extends IntentService {
                         String verification_status = in.readLine();
                         if (verification_status.equals("Verified")) {
                             out.println(command);
+                            out.flush();
                             registrationStatus = true;
+                            out.println("exit");
+                            out.flush();
                         } else {
                             showToast(constants.MESSAGE_APP_SERVER_ERROR + " (Authentication key is incorrect)");
                         }
@@ -127,8 +127,10 @@ public class RegistrationIntentService extends IntentService {
                 finally
                 {
                     // Close input/output streams and socket
+
                     try{
-                        if (out != null) { out.close(); }
+                        if (out != null) {
+                            out.close(); }
                         if (in != null) { in.close(); }
                         if (socket != null) { socket.close(); }
                     }

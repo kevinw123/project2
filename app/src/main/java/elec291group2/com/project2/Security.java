@@ -99,7 +99,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("1");
+                sendCommand("2");
             }
         });
 
@@ -108,7 +108,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("0");
+                sendCommand("3");
             }
         });
 
@@ -117,7 +117,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Door " + (doorStatus ? "OFF" : "ON"));
+                sendCommand(doorStatus ? "7" : "4");
             }
         });
 
@@ -126,7 +126,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Motion " + (motionStatus ? "OFF" : "ON"));
+                sendCommand(motionStatus ? "8" : "5");
             }
         });
 
@@ -135,7 +135,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Laser " + (laserStatus ? "OFF" : "ON"));
+                sendCommand(laserStatus ? "9" : "6");
             }
         });
 
@@ -144,7 +144,7 @@ public class Security extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("Alarm " + (alarmStatus ? "OFF" : "ON"));
+                sendCommand(alarmStatus ? "0" : "1");
             }
         });
 
@@ -202,29 +202,7 @@ public class Security extends Fragment
         alarmText.setTextColor(alarmValue == 0 ? Color.RED : Color.GREEN);
     }
 
-    /*
-    public void updateAllButtons()
-    {
-        // update Value of the lights
-        systemStatus = Character.getNumericValue(status.charAt(0)) == 1 ? ON : OFF;
-        doorStatus = Character.getNumericValue(status.charAt(1)) == 1 ? ON : OFF;
-        motionStatus = Character.getNumericValue(status.charAt(2)) == 1 ? ON : OFF;
-        laserStatus = Character.getNumericValue(status.charAt(3)) == 1 ? ON : OFF;
-        alarmStatus = Character.getNumericValue(status.charAt(4)) == 1 ? ON : OFF;
 
-        // update buttons with new statuses
-        updateButton(doorButton, doorStatus);
-        updateButton(motionButton, motionStatus);
-        updateButton(laserButton, laserStatus);
-        updateButton(alarmButton, alarmStatus);
-    }
-
-    public void updateButton(Button btn, boolean status)
-    {
-        btn.setText(status ? "ARMED" : "DISARMED");
-        btn.getBackground().setColorFilter(status ? Color.GREEN : Color.RED, PorterDuff.Mode.MULTIPLY);
-    }
-    */
 
     @Override
     public void onPause()
@@ -269,7 +247,7 @@ public class Security extends Fragment
             @Override
             public void run()
             {
-                //updateAllButtons();
+
                 updateText();
             }
         });
@@ -289,7 +267,7 @@ public class Security extends Fragment
                     status = temp_status;
                     updateStatusUI();
                 }
-                handler.postDelayed(getStatus, 1000);
+                handler.postDelayed(getStatus, 100);
             }
         } catch (Exception e)
         {

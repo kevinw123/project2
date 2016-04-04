@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "elec291group2.com.project2"
-        minSdkVersion 23
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
