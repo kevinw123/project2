@@ -37,7 +37,7 @@ public class Camera extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         mVideoView = (VideoView) findViewById(R.id.surface_view);
-        path = "rtmp://192.168.1.71:1935/live/myStream";
+        path = "rtmp://192.168.1.40:1935/live/myStream";
 
 
 

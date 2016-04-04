@@ -44,7 +44,7 @@ public class Overview extends Fragment
     private String auth_key;
     // status: { systemStatus, doorStatus, motionStatus, laserStatus, alarmStatus
     //           livingRoomLights, kitchenLights, washroomLights, bedroomLights, masterBedroomLights }
-    private String status = "1111111111";
+    private String status;
     private Runnable getStatus = new Runnable()
     {
         @Override

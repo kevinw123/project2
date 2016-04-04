@@ -70,7 +70,7 @@ public class Lights extends Fragment
     private Socket socket;
     private String ipField;
     private String portField;
-    private String status = "1111111111"; //temp status placeholder
+    private String status;
     private String auth_key;
     private Runnable getStatus = new Runnable()
     {
@@ -144,7 +144,6 @@ public class Lights extends Fragment
             public void onClick(View v)
             {
                 sendCommand("2" + (livingRoomStatus ? "0" : "1"));
-
             }
         });
 
@@ -184,26 +183,30 @@ public class Lights extends Fragment
             }
         });
 
-        livingRoomTimer.setOnClickListener(new View.OnClickListener() {
+        livingRoomTimer.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                sendCommand("LivingRoomTimed " + duration);
+            public void onClick(View v)
+            {
+                sendCommand("8 " + duration);
             }
         });
 
-        kitchenTimer.setOnClickListener(new View.OnClickListener() {
+        kitchenTimer.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                sendCommand("KitchenTimed " + duration);
+            public void onClick(View v)
+            {
+                sendCommand("9 " + duration);
             }
         });
-        
+
         washroomTimer.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                sendCommand("WashroomTimed " + duration);
+                sendCommand("6 " + duration);
             }
         });
 
@@ -212,7 +215,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("BedroomTimed " + duration);
+                sendCommand("7 " + duration);
             }
         });
 
@@ -221,7 +224,7 @@ public class Lights extends Fragment
             @Override
             public void onClick(View v)
             {
-                sendCommand("MasterBedroomTimed " + duration);
+                sendCommand("10 " + duration);
             }
         });
 
@@ -249,8 +252,6 @@ public class Lights extends Fragment
 
 
         new Thread(new ClientThread()).start();
-
-        updateText();
 
         return view;
     }
@@ -342,7 +343,7 @@ public class Lights extends Fragment
             String temp_status = in.readLine();
             if (temp_status != null)  // Retrieve command from Android device, add to device queue
             {
-                Log.v("Status", status);
+                Log.v("Status", temp_status);
                 if (temp_status.length() == 10)
                 {
                     status = temp_status;
