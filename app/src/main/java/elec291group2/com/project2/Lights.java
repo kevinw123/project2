@@ -235,8 +235,8 @@ public class Lights extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser)
             {
-                timerValue.setText("Timer: " + String.valueOf(progress * 60 / 100) + " seconds");
-                duration = progress * 60 / 100;
+                timerValue.setText("Timer: " + String.valueOf(progress * 20 / 100) + " seconds");
+                duration = progress * 20 / 100;
             }
 
             @Override
