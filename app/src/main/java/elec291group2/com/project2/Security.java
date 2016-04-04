@@ -8,8 +8,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -150,9 +152,6 @@ public class Security extends Fragment
 
         new Thread(new ClientThread()).start();
 
-        //updateAllButtons();
-        //updateText();
-
         return view;
     }
 
@@ -200,15 +199,17 @@ public class Security extends Fragment
         alarmStatus = alarmValue == 0 ? OFF : ON;
         alarmText.setText(alarmValue == 0 ? "OFF" : "ON");
         alarmText.setTextColor(alarmValue == 0 ? Color.RED : Color.GREEN);
+
+        Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
+        menu.findItem(R.id.status).setTitle("System Status: " +
+                (systemValue == 0 ? "UNARMED" :
+                systemValue == 1 ? "ARMED" : "TRIGGERED"));
     }
-
-
 
     @Override
     public void onPause()
     {
         if(socket != null)
-
         {
             sendCommand("exit");
             try
@@ -247,13 +248,10 @@ public class Security extends Fragment
             @Override
             public void run()
             {
-
                 updateText();
             }
         });
     }
-
-
 
     private void getStatus()
     {
@@ -277,8 +275,6 @@ public class Security extends Fragment
 
     }
 
-
-
     class ClientThread implements Runnable
     {
         @Override
@@ -286,7 +282,6 @@ public class Security extends Fragment
         {
             try
             {
-
                 socket = new Socket(ipField, Integer.parseInt(portField));
 
                 if(socket != null) // TODO: Find a valid condition to check
