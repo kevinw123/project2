@@ -167,7 +167,7 @@ public class Security extends Fragment
         systemStatus = systemValue == 0 ? OFF : ON;
         systemText.setText(systemValue == 0 ? "UNARMED" :
                 systemValue == 1 ? "ARMED" :
-                systemValue == 2 ? "TRIGGERED" : "FAILED ENTRY");
+                        systemValue == 2 ? "TRIGGERED" : "FAILED ENTRY");
         systemText.setTextColor(systemValue == 0 ? Color.GREEN :
                 systemValue == 1 ? Color.BLUE : Color.RED);
 
@@ -204,7 +204,7 @@ public class Security extends Fragment
         Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
         menu.findItem(R.id.status).setTitle("System Status: " +
                 (systemValue == 0 ? "UNARMED" :
-                systemValue == 1 ? "ARMED" : "TRIGGERED"));
+                        systemValue == 1 ? "ARMED" : "TRIGGERED"));
     }
 
     @Override

@@ -99,7 +99,7 @@ public class Overview extends Fragment
         // systemValue: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R), 3 = password trigger (R)
         systemText.setText(systemValue == 0 ? "UNARMED" :
                 systemValue == 1 ? "ARMED" :
-                systemValue == 2 ? "TRIGGERED" : "FAILED ENTRY");
+                systemValue == 2 ? "TRIGGERED" : "ENTRY");
         systemText.setTextColor(systemValue == 0 ? Color.GREEN :
                 systemValue == 1 ? Color.BLUE : Color.RED);
 
