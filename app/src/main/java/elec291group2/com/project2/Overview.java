@@ -90,43 +90,44 @@ public class Overview extends Fragment
      */
     public void updateSecurity()
     {
-        int systemStatus = Character.getNumericValue(status.charAt(0)),
-                doorStatus = Character.getNumericValue(status.charAt(1)),
-                motionStatus = Character.getNumericValue(status.charAt(2)),
-                laserStatus = Character.getNumericValue(status.charAt(3)),
-                alarmStatus = Character.getNumericValue(status.charAt(4));
+        int systemValue = Character.getNumericValue(status.charAt(0)),
+                doorValue = Character.getNumericValue(status.charAt(1)),
+                motionValue = Character.getNumericValue(status.charAt(2)),
+                laserValue = Character.getNumericValue(status.charAt(3)),
+                alarmValue = Character.getNumericValue(status.charAt(4));
 
-        // systemStatus: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
-        systemText.setText(systemStatus == 0 ? "UNARMED" :
-                systemStatus == 1 ? "ARMED" : "TRIGGERED");
-        systemText.setTextColor(systemStatus == 0 ? Color.GREEN :
-                systemStatus == 1 ? Color.BLUE : Color.RED);
+        // systemValue: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R), 3 = password trigger (R)
+        systemText.setText(systemValue == 0 ? "UNARMED" :
+                systemValue == 1 ? "ARMED" :
+                systemValue == 2 ? "TRIGGERED" : "FAILED ENTRY");
+        systemText.setTextColor(systemValue == 0 ? Color.GREEN :
+                systemValue == 1 ? Color.BLUE : Color.RED);
 
-        // doorStatus: 0 = closed (G), 1 = armed (B), 2 = open (M), 3 = triggered (R)
-        doorText.setText(doorStatus == 0 ? "CLOSED" :
-                doorStatus == 1 ? "ARMED" :
-                        doorStatus == 2 ? "OPEN" : "TRIGGERED");
-        doorText.setTextColor(doorStatus == 0 ? Color.GREEN :
-                doorStatus == 1 ? Color.BLUE :
-                        doorStatus == 2 ? Color.MAGENTA : Color.RED);
+        // doorValue: 0 = closed (G), 1 = armed (B), 2 = open (M), 3 = triggered (R)
+        doorText.setText(doorValue == 0 ? "CLOSED" :
+                doorValue == 1 ? "ARMED" :
+                        doorValue == 2 ? "OPEN" : "TRIGGERED");
+        doorText.setTextColor(doorValue == 0 ? Color.GREEN :
+                doorValue == 1 ? Color.BLUE :
+                        doorValue == 2 ? Color.MAGENTA : Color.RED);
 
-        // motionStatus: 0 = idle (G), 1 = armed (B), 2 = detected (M), 3 = triggered (R)
-        motionText.setText(motionStatus == 0 ? "IDLE" :
-                motionStatus == 1 ? "ARMED" :
-                        motionStatus == 2 ? "DETECTED" : "TRIGGERED");
-        motionText.setTextColor(motionStatus == 0 ? Color.GREEN :
-                motionStatus == 1 ? Color.BLUE :
-                        motionStatus == 2 ? Color.MAGENTA : Color.RED);
+        // motionValue: 0 = idle (G), 1 = armed (B), 2 = detected (M), 3 = triggered (R)
+        motionText.setText(motionValue == 0 ? "IDLE" :
+                motionValue == 1 ? "ARMED" :
+                        motionValue == 2 ? "DETECTED" : "TRIGGERED");
+        motionText.setTextColor(motionValue == 0 ? Color.GREEN :
+                motionValue == 1 ? Color.BLUE :
+                        motionValue == 2 ? Color.MAGENTA : Color.RED);
 
-        // motionStatus: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
-        laserText.setText(laserStatus == 0 ? "UNARMED" :
-                laserStatus == 1 ? "ARMED" : "TRIGGERED");
-        laserText.setTextColor(laserStatus == 0 ? Color.GREEN :
-                laserStatus == 1 ? Color.BLUE : Color.RED);
+        // motionValue: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
+        laserText.setText(laserValue == 0 ? "UNARMED" :
+                laserValue == 1 ? "ARMED" : "TRIGGERED");
+        laserText.setTextColor(laserValue == 0 ? Color.GREEN :
+                laserValue == 1 ? Color.BLUE : Color.RED);
 
-        // alarmStatus: 0 = off (R), 1 = on (G)
-        alarmText.setText(alarmStatus == 0 ? "OFF" : "ON");
-        alarmText.setTextColor(alarmStatus == 0 ? Color.RED : Color.GREEN);
+        // alarmValue: 0 = off (R), 1 = on (G)
+        alarmText.setText(alarmValue == 0 ? "OFF" : "ON");
+        alarmText.setTextColor(alarmValue == 0 ? Color.RED : Color.GREEN);
     }
 
     /**

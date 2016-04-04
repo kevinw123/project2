@@ -65,7 +65,7 @@ public class Lights extends Fragment
             washroomStatus = false,
             bedroomStatus = false,
             masterBedroomStatus = false;
-    byte duration = 0;
+    byte duration = 1;
 
     private Socket socket;
     private String ipField;
@@ -250,8 +250,7 @@ public class Lights extends Fragment
             {
             }
         });
-
-
+        
         new Thread(new ClientThread()).start();
 
         return view;

@@ -56,7 +56,7 @@ public class Security extends Fragment
     private Socket socket;
     private String ipField;
     private String portField;
-    private String status = "1111111111";
+    private String status;
     private String auth_key = "";
     private Runnable getStatus = new Runnable()
     {
@@ -163,10 +163,11 @@ public class Security extends Fragment
                 laserValue = Character.getNumericValue(status.charAt(3)),
                 alarmValue = Character.getNumericValue(status.charAt(4));
 
-        // systemValue: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R)
+        // systemStatus: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R), 3 = password trigger (R)
         systemStatus = systemValue == 0 ? OFF : ON;
         systemText.setText(systemValue == 0 ? "UNARMED" :
-                systemValue == 1 ? "ARMED" : "TRIGGERED");
+                systemValue == 1 ? "ARMED" :
+                systemValue == 2 ? "TRIGGERED" : "FAILED ENTRY");
         systemText.setTextColor(systemValue == 0 ? Color.GREEN :
                 systemValue == 1 ? Color.BLUE : Color.RED);
 
