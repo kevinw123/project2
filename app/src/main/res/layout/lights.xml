@@ -285,7 +285,7 @@
         android:layout_above="@+id/timer_slider"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:text="Timer: 0 seconds"
+        android:text="Timer: 1 seconds"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
 </RelativeLayout>

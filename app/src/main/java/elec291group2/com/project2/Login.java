@@ -46,7 +46,7 @@ public class Login extends AppCompatActivity
             final EditText input = new EditText(this);
             prompt.setView(input);
             input.setLayoutParams(new LinearLayout.LayoutParams(50, 30));
-            input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
             input.setTransformationMethod(PasswordTransformationMethod.getInstance());
             prompt.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
             {

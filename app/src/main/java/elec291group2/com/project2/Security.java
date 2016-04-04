@@ -197,7 +197,7 @@ public class Security extends Fragment
                 laserValue == 1 ? Color.BLUE : Color.RED);
 
         // alarmValue: 0 = off (R), 1 = on (G)
-        alarmStatus = laserValue == 0 ? OFF : ON;
+        alarmStatus = alarmValue == 0 ? OFF : ON;
         alarmText.setText(alarmValue == 0 ? "OFF" : "ON");
         alarmText.setTextColor(alarmValue == 0 ? Color.RED : Color.GREEN);
     }
