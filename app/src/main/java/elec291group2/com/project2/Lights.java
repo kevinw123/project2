@@ -250,10 +250,37 @@ public class Lights extends Fragment
             {
             }
         });
-        
-        new Thread(new ClientThread()).start();
 
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        new Thread(new ClientThread()).start();
+    }
+
+    @Override
+    public void onPause()
+    {
+        if (socket != null)
+
+        {
+            sendCommand("exit");
+            try
+            {
+
+                in.close();
+                out.close();
+                socket.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
+        }
+        super.onPause();
     }
 
     public void updateText()
@@ -284,29 +311,6 @@ public class Lights extends Fragment
         masterBedroomStatus = masterBedroomLights == 0 ? OFF : ON;
         masterBedroomText.setText(masterBedroomLights == 0 ? "OFF" : "ON");
         masterBedroomText.setTextColor(masterBedroomLights == 0 ? Color.RED : Color.GREEN);
-    }
-
-
-    @Override
-    public void onPause()
-    {
-        if (socket != null)
-
-        {
-            sendCommand("exit");
-            try
-            {
-
-                in.close();
-                out.close();
-                socket.close();
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
-        }
-        super.onPause();
     }
 
     private void sendCommand(String command)

@@ -150,9 +150,35 @@ public class Security extends Fragment
             }
         });
 
-        new Thread(new ClientThread()).start();
-
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        new Thread(new ClientThread()).start();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        if(socket != null)
+        {
+            sendCommand("exit");
+            try
+            {
+
+                in.close();
+                out.close();
+                socket.close();
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
+        }
+        super.onPause();
     }
 
     public void updateText()
@@ -205,27 +231,6 @@ public class Security extends Fragment
         menu.findItem(R.id.status).setTitle("System Status: " +
                 (systemValue == 0 ? "UNARMED" :
                         systemValue == 1 ? "ARMED" : "TRIGGERED"));
-    }
-
-    @Override
-    public void onPause()
-    {
-        if(socket != null)
-        {
-            sendCommand("exit");
-            try
-            {
-
-                in.close();
-                out.close();
-                socket.close();
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
-        }
-        super.onPause();
     }
 
     private void sendCommand(String command)
