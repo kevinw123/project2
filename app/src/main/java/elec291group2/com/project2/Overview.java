@@ -32,7 +32,7 @@ public class Overview extends Fragment
     View view;
     SharedPreferences sharedPreferences;
 
-    //Server stuff
+    //Server variables
     BufferedReader in;
     PrintWriter out;
     Handler handler;
@@ -59,6 +59,7 @@ public class Overview extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        // inflate fragment view
         view = inflater.inflate(R.layout.overview, container, false);
 
         // get the IP and port for socket
@@ -83,6 +84,7 @@ public class Overview extends Fragment
         return view;
     }
 
+    // when fragment is resumed, create the socket thread
     @Override
     public void onResume()
     {
@@ -90,6 +92,7 @@ public class Overview extends Fragment
         super.onResume();
     }
 
+    // when fragment is exited, close connection with socket
     @Override
     public void onPause()
     {
@@ -105,21 +108,23 @@ public class Overview extends Fragment
             {
                 e.printStackTrace();
             }
-            // Toast.makeText(this.getContext(), "Client has closed the connection.", Toast.LENGTH_SHORT).show();
         }
         super.onPause();
     }
+
     /**
      * Update security system status text on Overview with status string.
      */
     public void updateSecurity()
     {
+        // parse the status string into the system's statuses
         int systemValue = Character.getNumericValue(status.charAt(0)),
                 doorValue = Character.getNumericValue(status.charAt(1)),
                 motionValue = Character.getNumericValue(status.charAt(2)),
                 laserValue = Character.getNumericValue(status.charAt(3)),
                 alarmValue = Character.getNumericValue(status.charAt(4));
 
+        // set the text and colours on the screen based on the status bits
         // systemValue: 0 = unarmed (G), 1 = armed (B), 2 = triggered (R), 3 = password trigger (R)
         systemText.setText(systemValue == 0 ? "UNARMED" :
                 systemValue == 1 ? "ARMED" :
@@ -159,12 +164,14 @@ public class Overview extends Fragment
      */
     public void updateLights()
     {
+        // parse the status string into the lights' statuses
         int livingRoomLights = Character.getNumericValue(status.charAt(7)),
                 kitchenLights = Character.getNumericValue(status.charAt(8)),
                 washroomLights = Character.getNumericValue(status.charAt(5)),
                 bedroomLights = Character.getNumericValue(status.charAt(6)),
                 masterBedroomLights = Character.getNumericValue(status.charAt(9));
 
+        // set the text colours on the screen based on the status bits
         // 0 = on (R), 1 = off (G)
         livingText.setTextColor(livingRoomLights == 0 ? Color.RED : Color.GREEN);
         kitchenText.setTextColor(kitchenLights == 0 ? Color.RED : Color.GREEN);
@@ -173,12 +180,14 @@ public class Overview extends Fragment
         masterBedroomText.setTextColor(masterBedroomLights == 0 ? Color.RED : Color.GREEN);
     }
 
+    // send command to be received by the RPi
     private void sendCommand(String command)
     {
         if(out != null)
         {
             try
             {
+                // send a command through the writer stream
                 out.println(command);
             } catch (Exception e)
             {
@@ -186,6 +195,8 @@ public class Overview extends Fragment
             }
         }
     }
+
+    // update the UI of the fragment
     public void updateStatusUI()
     {
         getActivity().runOnUiThread(new Runnable()
@@ -199,6 +210,7 @@ public class Overview extends Fragment
         });
     }
 
+    // retrieve a status from the input stream
     private void getStatus()
     {
         try
@@ -206,11 +218,14 @@ public class Overview extends Fragment
             String temp_status = in.readLine();
             if (temp_status != null)  // Retrieve command from Android device, add to device queue
             {
+                // check if the status string is of right length
                 if (temp_status.length() == 10)
                     {
+                        // update the status string and UI elements
                         status = temp_status;
                         updateStatusUI();
                     }
+                // pause for 1 second
                 handler.postDelayed(getStatus, 1000);
             }
         } catch (Exception e)
@@ -218,9 +233,9 @@ public class Overview extends Fragment
             e.printStackTrace();
             handler.removeCallbacksAndMessages(getStatus);
         }
-
     }
 
+    // Thread class to communicate between the Android app and RPi
     class ClientThread implements Runnable
     {
         @Override
@@ -228,16 +243,21 @@ public class Overview extends Fragment
         {
             try
             {
+                // create a socket using the stored IP and Port
                 socket = new Socket(ipField, Integer.parseInt(portField));
 
-                if(socket != null) // TODO: Find a valid condition to check
+                // if socket is properly created, set up the stream communication streams
+                if(socket != null)
                 {
+                    // create the bufferedReader stream and printWriter stream
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    // check the authentication key with the server's key
                     Log.v("System.out", auth_key);
                     sendCommand(auth_key);
                     String verification_status = in.readLine();
                     Log.v("System.out", verification_status);
+                    // establish connection if they match
                     if(verification_status.equals("Verified"))
                     {
                         showToast("Connected.");
@@ -247,11 +267,13 @@ public class Overview extends Fragment
                         handler.postDelayed(getStatus, 1000);
                         Looper.loop();
                     }
+                    // else, alert user
                     else
                     {
                         showToast("Authentication key is incorrect");
                     }
                 }
+                // if socket is null, alert user
                 else
                 {
                     showToast("Server information is incorrect.");
@@ -272,7 +294,7 @@ public class Overview extends Fragment
         }
     }
 
-
+    // helper function to show toasts
     private void showToast(String message) {
         final String msg = message;
         new Handler(Looper.getMainLooper()).post(new Runnable() {

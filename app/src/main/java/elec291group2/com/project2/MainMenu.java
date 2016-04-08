@@ -30,27 +30,31 @@ public class MainMenu extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Overview");
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        // create the drawer view
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        // set the drawer as a listener and get the menu
         NavigationView nv = (NavigationView) findViewById(R.id.nav_view);
         Menu menu = nv.getMenu();
         nv.setNavigationItemSelectedListener(this);
 
+        // retrieve ip address, port, notifications
         String ip = sharedPreferences.getString("IP", "Not set");
         String port = sharedPreferences.getString("Port", "Not set");
         boolean notifStatus = sharedPreferences.getBoolean("Notifications", false);
 
+        // set the menu items to the values
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + ip);
         menu.findItem(R.id.port).setTitle("Port: " + port);
         menu.findItem(R.id.notifications).setTitle("Notifications: " + (notifStatus ? "On" : "Off"));
 
+        // send the user to the settings menu if either IP or Port have not been set
         if (ip.equals("Not set") || port.equals("Not set"))
         {
             toolbar.setTitle("Settings");
@@ -65,12 +69,14 @@ public class MainMenu extends AppCompatActivity
             prompt.show();
             getFragmentManager().beginTransaction().replace(R.id.relativeLayout, new Settings()).commit();
         }
+        // if they have been set, open the overview fragment
         else
         {
             getFragmentManager().beginTransaction().replace(R.id.relativeLayout, new Overview()).commit();
         }
     }
 
+    // if drawer is open when back is pressed, close drawer, otherwise go back to overview
     @Override
     public void onBackPressed()
     {
@@ -86,12 +92,15 @@ public class MainMenu extends AppCompatActivity
         }
     }
 
+    // change to a fragment based on the selected item in the drawer
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // instantiate a fragment
         Fragment fragment = null;
+        // determine which item was selected
         switch(item.getItemId())
         {
             case R.id.nav_overview:
@@ -118,6 +127,7 @@ public class MainMenu extends AppCompatActivity
             default:
                 break;
         }
+        // go to the new fragment and inflate it on screen
         if(fragment != null)
         {
             FragmentManager fm = getFragmentManager();
@@ -127,6 +137,5 @@ public class MainMenu extends AppCompatActivity
         }
         return true;
     }
-
 }
 

@@ -36,7 +36,9 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        // create the settings fragment
         super.onCreate(savedInstanceState);
+        // get preferences from the XML layout
         addPreferencesFromResource(R.xml.preferences);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
@@ -44,8 +46,8 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
     @Override
     public void onResume()
     {
-
         super.onResume();
+        // update each preference from the menu
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); ++i)
         {
             Preference preference = getPreferenceScreen().getPreference(i);
@@ -65,9 +67,11 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         }
     }
 
+    // run this when a preference is changed from the menu
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key)
     {
+        // update the preference
         updatePreference(findPreference(key), key);
         String un_hashed = sharedPreferences.getString("auth_key", "1234");
         if(key.equals("auth_key") && !un_hashed.equals(last_hash))
@@ -76,10 +80,10 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
             new hash().execute(un_hashed);
         }
 
+        // update the IP and Port on the drawer
         Menu menu = ((NavigationView) getActivity().findViewById(R.id.nav_view)).getMenu();
         menu.findItem(R.id.ip_address).setTitle("IP Address: " + sharedPreferences.getString("IP", ""));
         menu.findItem(R.id.port).setTitle("Port: " + sharedPreferences.getString("Port", ""));
-        //menu.findItem(R.id.auth_key).setTitle("Authentication Key: " + sharedPreferences.getString("Authentication Key", ""));
 
         // Register with GCM and app server if Notifications switches to 'enabled'
         if ( key.equals("Notifications")
@@ -111,11 +115,12 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         }
     }
 
+    // Update the Preference's summary on the Settings screen
     private void updatePreference(Preference preference, String key)
     {
-
-
+        // do not update the summaries if the changed pref was PIN or Authenication key
         if (preference == null || key.equals("PIN") || key.equals("auth_key")) return;
+        // update the summary of Preference based on it's type
         if (preference instanceof ListPreference)
         {
             ListPreference listPreference = (ListPreference) preference;
@@ -133,9 +138,7 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         else if (preference instanceof CheckBoxPreference)
         {
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
-            //checkBoxPreference.setSummary(checkBoxPreference.isChecked() ? "Enabled" : "Disabled");
             SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-            //preference.setSummary(sharedPrefs.getBoolean(key, false) ? "Enabled" : "Disabled");
             if (isAdded()){
                 if(!sharedPrefs.getBoolean(key,false))
                     preference.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_dnd_forwardslash_24dp, null));
@@ -172,7 +175,6 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         }
     }
 
-
     private class hash extends AsyncTask<String, Void, String>
     {
         protected String doInBackground(String... params) {
@@ -181,7 +183,6 @@ public class Settings extends PreferenceFragment implements SharedPreferences.On
         }
 
         protected void onPostExecute(String result) {
-            //Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             Log.v("HASHED", result);
             last_hash = result;
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());

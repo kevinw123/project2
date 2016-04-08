@@ -37,10 +37,13 @@ public class Login extends AppCompatActivity
         loginBtn = (Button) findViewById(R.id.login_button);
         pinField = (EditText) findViewById(R.id.pin_field);
 
+        // pull stored PIN from sharedPrefs
         pin = sharedPreferences.getString("PIN", "Not set");
 
+        // if the user has not set a PIN, prompt user to set a pin
         if (pin.equals("Not set"))
         {
+            // create a alert dialog
             AlertDialog.Builder prompt = new AlertDialog.Builder(this);
             prompt.setMessage("Please set a security PIN.");
             final EditText input = new EditText(this);
@@ -48,10 +51,13 @@ public class Login extends AppCompatActivity
             input.setLayoutParams(new LinearLayout.LayoutParams(50, 30));
             input.setInputType(InputType.TYPE_CLASS_NUMBER);
             input.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+            // pressing OK saves the PIN
             prompt.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int which)
                 {
+                    // save PIN into sharedPrefs
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("PIN", input.getText().toString());
                     editor.commit();
@@ -59,6 +65,7 @@ public class Login extends AppCompatActivity
                     pin = sharedPreferences.getString("PIN", "Not set");
                 }
             });
+            // pressing CANCEL exits out of the app
             prompt.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int which)
@@ -69,6 +76,7 @@ public class Login extends AppCompatActivity
                     startActivity(exitApp);
                 }
             });
+            // display dialog on screen
             AlertDialog dialog = prompt.create();
             dialog.setOnShowListener(new DialogInterface.OnShowListener()
             {
@@ -87,11 +95,14 @@ public class Login extends AppCompatActivity
             @Override
             public void onClick(final View v)
             {
+                // check if PIN matches the one saved in sharedPrefs
                 if (pinField.getText().toString().equals(pin))
                 {
+                    // enter main menu if matches
                     Intent main = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(main);
                 }
+                // if PIN is wrong, clear field and tell user to try again
                 else
                 {
                     pinField.setText("");
